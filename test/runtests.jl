@@ -2,10 +2,8 @@ using NSDEBase
 using Test
 
 @testset "RHS and IVP" begin
-    f(u, t, θ) = @. u * (1.0 - u)
-    rhs = RHS(f, ∅)
-    @test rhs isa InitialValueFunction
-    problem = IVP(rhs, 0.5, 0.0, 1.0)
+    f(u, t) = @. u * (1.0 - u)
+    problem = IVP(f, 0.5, 0.0, 1.0)
     @test problem isa InitialValueProblem
 end
 
