@@ -13,12 +13,12 @@ end
 
 function RightHandSideFunction(_f::Function)
     if hasmethod(_f, NTuple{2,Any})
-        f(u, t) = _f(u, t)
-        Df(u, t) = jacobian(u -> f(u, t), u)
+        f = (u, t) -> _f(u, t)
+        Df = (u, t) -> jacobian(u -> f(u, t), u)
         return RightHandSideFunction(f, Df)
     elseif hasmethod(_f, NTuple{3,Any})
-        f(du, u, t) = _f(du, u, t)
-        Df(J, u, t) = jacobian!(J, (du, u) -> f(du, u, t), similar(u), u)
+        f = (du, u, t) -> _f(du, u, t)
+        Df = (J, u, t) -> jacobian!(J, (du, u) -> f(du, u, t), similar(u), u)
         return RightHandSideFunction(f, Df)
     end
 end
