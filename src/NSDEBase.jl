@@ -6,7 +6,6 @@ export InitialValueProblem, IVP, RightHandSideFunction, RHS, InitialValueSolver,
 export Dahlquist, Logistic, Riccati, SimplePendulum, VanderPol, Lorenz, Rössler
 export solve
 
-using ArrowMacros
 using ForwardDiff: jacobian, jacobian!
 
 abstract type NSDEProblem end
