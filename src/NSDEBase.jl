@@ -1,6 +1,5 @@
 module NSDEBase
 
-export BlockVector, zero!, flatview!, nestedview!
 export AbstractProblem, AbstractSolver, AbstractSolution
 export InitialValueProblem, IVP, RightHandSideFunction, RHS, InitialValueSolver, InitialValueSolution
 export Dahlquist, Logistic, Riccati, SimplePendulum, VanderPol, Lorenz, Rössler
@@ -17,7 +16,6 @@ abstract type InitialValueSolution <: NSDESolution end
 
 function solve end
 
-include("arrays.jl")
 include("rhs.jl")
 include("ivp.jl")
 include("odes.jl")
