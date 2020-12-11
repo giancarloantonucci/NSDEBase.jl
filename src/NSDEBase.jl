@@ -6,7 +6,7 @@ export Dahlquist, Logistic, Riccati, SimplePendulum, VanderPol, Lorenz, Rössler
 export solve
 
 using ArrowMacros
-using ForwardDiff
+using ForwardDiff: jacobian, jacobian!
 
 abstract type NSDEProblem end
 abstract type NSDESolver end
