@@ -1,7 +1,8 @@
 module NSDEBase
 
 export AbstractProblem, AbstractSolver, AbstractSolution
-export InitialValueProblem, IVP, RightHandSideFunction, RHS, InitialValueSolver, InitialValueSolution
+export RightHandSideFunction, RHS
+export InitialValueProblem, IVP, InitialValueSolver, InitialValueSolution
 export Dahlquist, Logistic, Riccati, SimplePendulum, VanderPol, Lorenz, Rössler
 export solve
 
