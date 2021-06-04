@@ -20,6 +20,6 @@ function solve end
 
 include("rhs.jl")
 include("ivp.jl")
-include("examples.jl")
+include("odes.jl")
 
 end
