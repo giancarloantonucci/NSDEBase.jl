@@ -18,6 +18,8 @@ abstract type InitialValueSolution <: NSDESolution end
 
 function solve end
 
-include("ODEs.jl")
+include("rhs.jl")
+include("ivp.jl")
+include("examples.jl")
 
 end
