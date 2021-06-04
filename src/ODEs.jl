@@ -49,7 +49,7 @@ returns a constructor for an initial value problem.
 - `t0    :: Real`                                   : initial time.
 - `tN    :: Real`                                   : final time.
 """
-mutable struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
+struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
     rhs::rhs_T
     u0::u0_T
     tspan::tspan_T
