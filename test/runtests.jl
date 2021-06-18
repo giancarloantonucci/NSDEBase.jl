@@ -11,6 +11,10 @@ using Test
     problem = IVP(f!, [0.5], 0.0, 1.0)
     @test problem isa InitialValueProblem
     @test problem.rhs isa RightHandSideFunction
+    problem2 = copy(problem)
+    @test problem2.rhs == problem.rhs
+    @test problem2.u0 == problem.u0
+    @test problem2.tspan == problem.tspan
 end
 
 @testset "ODEs" begin
