@@ -7,7 +7,7 @@ A Julia package containing shared types and functions of `NSDE` and related pack
 
 ## Installation
 
-`NSDEBase` is compatible with Julia `v1.0` and above, and it can be installed from the REPL by running
+`NSDEBase` is a registered package compatible with Julia `v1.0` and above, and it can be installed from the REPL by running
 ```julia
 ]add NSDEBase
 ```
