@@ -34,18 +34,3 @@ function RightHandSideFunction(f_or_f!::Function)
     end
 end
 @doc (@doc RightHandSideFunction) RHS(args...; kwargs...) = RightHandSideFunction(args...; kwargs...)
-
-function Base.show(io::IO, rhs::RightHandSideFunction)
-    if get(io, :compact, false)
-        print(io, "RightHandSideFunction")
-    else
-        @↓ f, f!, Df, Df! = rhs
-        print(io,
-            "RightHandSideFunction:\n",
-            "  f: ", typeof(f), "\n",
-            "  f!: ", typeof(f!), "\n",
-            "  Df: ", typeof(Df), "\n",
-            "  Df!: ", typeof(Df!), "\n",
-        )
-    end
-end

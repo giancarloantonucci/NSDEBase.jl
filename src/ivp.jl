@@ -28,17 +28,3 @@ function Base.copy(ivp::InitialValueProblem)
     @↓ rhs, u0, tspan = ivp
     return IVP(rhs, u0, tspan)
 end
-
-function Base.show(io::IO, ivp::InitialValueProblem)
-    if get(io, :compact, false)
-        print(io, "InitialValueProblem")
-    else
-        @↓ rhs, u0, tspan = ivp
-        print(io,
-            "InitialValueProblem:\n",
-            "  rhs: ",  typeof(rhs), "\n",
-            "  u0: ", u0, "\n",
-            "  tspan: ", tspan, "\n",
-        )
-    end
-end

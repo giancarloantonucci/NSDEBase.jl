@@ -21,5 +21,7 @@ function solve end
 include("rhs.jl")
 include("ivp.jl")
 include("odes.jl")
+include("show.jl")
+
 
 end
