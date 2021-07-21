@@ -12,9 +12,11 @@ using ForwardDiff
 abstract type NSDEProblem end
 abstract type NSDESolver end
 abstract type NSDESolution end
+abstract type NSDEParameters end
 
 abstract type InitialValueSolver <: NSDESolver end
 abstract type InitialValueSolution <: NSDESolution end
+abstract type InitialValueParameters <: NSDEParameters end
 
 function solve end
 
