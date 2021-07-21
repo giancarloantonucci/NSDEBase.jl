@@ -8,7 +8,7 @@ function Dahlquist(u₀ = 1.0, tspan = (0.0, 1.0); λ = 1.0)
     f!(du, u, t) = @. du = λ * u
     return IVP(f!, u₀, tspan)
 end
-Dahlquist(; u₀ = 1.0, tspan = (0.0, 1.0), kwargs...) = Dahlquist(u₀, tspan; kwargs...)
+@suppress_err Dahlquist(; u₀ = 1.0, tspan = (0.0, 1.0), kwargs...) = Dahlquist(u₀, tspan; kwargs...)
 
 """
     Logistic(u₀ = 0.5, tspan = (0.0, 5.0); λ = 1.0) :: InitialValueProblem
@@ -20,7 +20,7 @@ function Logistic(u₀ = 0.5, tspan = (0.0, 5.0); λ = 1.0)
     f!(du, u, t) = @. du = λ * u * (1.0 - u)
     return IVP(f!, u₀, tspan)
 end
-Logistic(; u₀ = 0.5, tspan = (0.0, 5.0), kwargs...) = Logistic(u₀, tspan; kwargs...)
+@suppress_err Logistic(; u₀ = 0.5, tspan = (0.0, 5.0), kwargs...) = Logistic(u₀, tspan; kwargs...)
 
 """
     Riccati(u₀ = 0.0, tspan = (0.0, 5.0)) :: InitialValueProblem
@@ -32,7 +32,7 @@ function Riccati(u₀ = 0.0, tspan = (0.0, 5.0))
     f!(du, u, t) = @. du = u - t * u^2 + t
     return IVP(f!, u₀, tspan)
 end
-Riccati(; u₀ = 0.0, tspan = (0.0, 5.0), kwargs...) = Riccati(u₀, tspan; kwargs...)
+@suppress_err Riccati(; u₀ = 0.0, tspan = (0.0, 5.0), kwargs...) = Riccati(u₀, tspan; kwargs...)
 
 """
     SimplePendulum(u₀ = [0.0, π/2], tspan = (0.0, 2π); g = 1.0, L = 1.0) :: InitialValueProblem
@@ -48,7 +48,7 @@ function SimplePendulum(u₀ = [0.0, π/2], tspan = (0.0, 2π); g = 1.0, L = 1.0
     end
     return IVP(f!, u₀, tspan)
 end
-SimplePendulum(; u₀ = [0.0, π/2], tspan = (0.0, 2π), kwargs...) = SimplePendulum(u₀, tspan; kwargs...)
+@suppress_err SimplePendulum(; u₀ = [0.0, π/2], tspan = (0.0, 2π), kwargs...) = SimplePendulum(u₀, tspan; kwargs...)
 
 """
     VanderPol(u₀ = [1.0; 0.0], tspan = (0.0, 5.0); μ = 1.0) :: InitialValueProblem
@@ -64,7 +64,7 @@ function VanderPol(u₀ = [1.0; 0.0], tspan = (0.0, 5.0); μ = 1.0)
     end
     return IVP(f!, u₀, tspan)
 end
-VanderPol(; u₀ = [1.0; 0.0], tspan = (0.0, 5.0), kwargs...) = VanderPol(u₀, tspan; kwargs...)
+@suppress_err VanderPol(; u₀ = [1.0; 0.0], tspan = (0.0, 5.0), kwargs...) = VanderPol(u₀, tspan; kwargs...)
 
 """
     Lorenz(u₀ = [2.0, 3.0, -14.0], tspan = (0.0, 10.0); σ = 10.0, β = 8/3, ρ = 28.0) :: InitialValueProblem
@@ -81,7 +81,7 @@ function Lorenz(u₀ = [2.0, 3.0, -14.0], tspan = (0.0, 10.0); σ = 10.0, β = 8
     end
     return IVP(f!, u₀, tspan)
 end
-Lorenz(; u₀ = [2.0, 3.0, -14.0], tspan = (0.0, 10.0), kwargs...) = Lorenz(u₀, tspan; kwargs...)
+@suppress_err Lorenz(; u₀ = [2.0, 3.0, -14.0], tspan = (0.0, 10.0), kwargs...) = Lorenz(u₀, tspan; kwargs...)
 
 """
     Rössler(u₀ = [2.0, 0.0, 0.0], tspan = (0.0, 10.0); a = 0.2, b = 0.2, c = 5.7) :: InitialValueProblem
@@ -98,4 +98,4 @@ function Rössler(u₀ = [2.0, 0.0, 0.0], tspan = (0.0, 10.0); a = 0.2, b = 0.2,
     end
     return IVP(f!, u₀, tspan)
 end
-Rössler(; u₀ = [2.0, 0.0, 0.0], tspan = (0.0, 10.0), kwargs...) = Rössler(u₀, tspan; kwargs...)
+@suppress_err Rössler(; u₀ = [2.0, 0.0, 0.0], tspan = (0.0, 10.0), kwargs...) = Rössler(u₀, tspan; kwargs...)

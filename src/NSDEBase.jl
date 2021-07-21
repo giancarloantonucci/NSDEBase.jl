@@ -1,13 +1,14 @@
 module NSDEBase
 
-export AbstractProblem, AbstractSolver, AbstractSolution
+export NSDEProblem, NSDESolver, NSDESolution, NSDEParameters
 export RightHandSideFunction, RHS
-export InitialValueProblem, IVP, InitialValueSolver, InitialValueSolution
+export InitialValueProblem, IVP, InitialValueSolver, InitialValueSolution, InitialValueParameters
 export Dahlquist, Logistic, Riccati, SimplePendulum, VanderPol, Lorenz, Rössler
 export solve
 
 using ArrowMacros
 using ForwardDiff
+using Suppressor: @suppress_err
 
 abstract type NSDEProblem end
 abstract type NSDESolver end
@@ -23,6 +24,5 @@ function solve end
 include("rhs.jl")
 include("ivp.jl")
 include("odes.jl")
-# include("show.jl")
 
 end
