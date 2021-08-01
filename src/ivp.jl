@@ -5,18 +5,18 @@ returns a constructor for an initial value problem.
 
 ---
 
-    InitialValueProblem(rhs, u0, tspan) :: InitialValueProblem
-    IVP(args...; kwargs...) :: InitialValueProblem
+    InitialValueProblem(rhs, u0, tspan)
+    IVP(args...; kwargs...)
 
-returns an `InitialValueProblem` from:
+returns an `InitialValueProblem` with:
 - `rhs   :: Union{Function, RightHandSideFunction}` : right-hand side derivative.
 - `u0    :: Union{Number, AbstractVector{Number}}`  : initial condition.
 - `tspan :: Tuple{Real, Real}`                      : time domain.
 
 ---
 
-    InitialValueProblem(rhs, u0, t0::Real, tN::Real) :: InitialValueProblem
-    IVP(args...; kwargs...) :: InitialValueProblem
+    InitialValueProblem(rhs, u0, t0::Real, tN::Real)
+    IVP(args...; kwargs...)
 
 returns an `InitialValueProblem` with `tspan = (t0, tN)`.
 """
@@ -33,7 +33,7 @@ InitialValueProblem(f::Function, u0, t0, tN) = InitialValueProblem(RHS(f), u0, t
 @doc (@doc InitialValueProblem) IVP(args...; kwargs...) = InitialValueProblem(args...; kwargs...)
 
 """
-    copy(problem::InitialValueProblem) :: InitialValueProblem
+    copy(problem::InitialValueProblem)
 
 returns a copy of `problem`.
 """

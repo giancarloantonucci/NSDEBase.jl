@@ -5,10 +5,10 @@ returns a constructor for the right-hand side of an `InitialValueProblem`.
 
 ---
 
-    RightHandSideFunction(f, f!, Df, Df!) :: RightHandSideFunction
-    RHS(args...; kwargs...) :: RightHandSideFunction
+    RightHandSideFunction(f, f!, Df, Df!)
+    RHS(args...; kwargs...)
 
-returns a `RightHandSideFunction` from:
+returns a `RightHandSideFunction` with:
 - `f   :: Function` : right-hand side derivative.
 - `f!  :: Function` : right-hand side derivative (in-place).
 - `Df  :: Function` : jacobian of right-hand side derivative.
@@ -16,10 +16,10 @@ returns a `RightHandSideFunction` from:
 
 ---
 
-    RightHandSideFunction(f!_or_f::Function) :: RightHandSideFunction
-    RHS(args...; kwargs...) :: RightHandSideFunction
+    RightHandSideFunction(f!_or_f::Function)
+    RHS(args...; kwargs...)
 
-checks whether `f!_or_f` is in-place or not, and then returns a `RightHandSideFunction` with its fields defined accordingly.
+checks whether `f!_or_f` is in-place or not, and then returns a `RightHandSideFunction` with its fields constructed accordingly.
 """
 struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
     f::f_T
