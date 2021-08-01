@@ -28,8 +28,6 @@ struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
     Df!::Df!_T
 end
 
-RightHandSideFunction(f::Function, f!::Function, Df::Function, Df!::Function)
-
 function RightHandSideFunction(f!_or_f::Function)
     # Check if f!_or_f has form f!(du, u, t)
     if hasmethod(f!_or_f, NTuple{3, Any})
