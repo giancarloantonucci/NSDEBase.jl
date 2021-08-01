@@ -1,7 +1,7 @@
 """
     RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
 
-constructor for the right-hand side of an `InitialValueProblem`.
+defines a constructor for the right-hand side of an `InitialValueProblem`.
 """
 struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
     f::f_T

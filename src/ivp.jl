@@ -1,7 +1,7 @@
 """
     InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
 
-constructor for an initial value problem.
+defines a constructor for an initial value problem.
 """
 struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
     rhs::rhs_T
