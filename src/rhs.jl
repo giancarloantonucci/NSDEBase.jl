@@ -1,7 +1,7 @@
 """
     RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
 
-defines a constructor for the right-hand side of an `InitialValueProblem`.
+returns a constructor for the right-hand side of an `InitialValueProblem`.
 
 ---
 
@@ -47,3 +47,19 @@ function RightHandSideFunction(f!_or_f::Function)
 end
 
 @doc (@doc RightHandSideFunction) RHS(args...; kwargs...) = RightHandSideFunction(args...; kwargs...)
+
+Base.summary(io::IO, rhs::RightHandSideFunction) = print(io, "RightHandSideFunction")
+
+function Base.show(io::IO, rhs::RightHandSideFunction)
+    print(io, "RightHandSideFunction:\n")
+    pad = get(io, :pad, "")
+    newline = get(io, :newline, "\n")
+    names = propertynames(rhs)
+    N = length(names)
+    args(n) = (n == 1 ? "(u, t)" : n == 2 ? "(du, u, t)" : n == 3 ? "(u, t)" : "(J, du, u, t)")
+    for (n, name) in enumerate(names)
+        field = getproperty(rhs, name)
+        print(io, pad, "   ‣ " * string(name), args(n))
+        n == N ? print(io, newline) : print(io, "\n")
+    end
+end
