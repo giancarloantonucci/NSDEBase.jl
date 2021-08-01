@@ -1,8 +1,30 @@
 # NSDEBase.jl
 
+```@contents
+```
+
 ## API
+
+### RHS
+
+```@docs
+RightHandSideFunction
+```
+
+### IVP
+
+```@docs
+InitialValueProblem
+```
+
+### ODEs
 
 ```@autodocs
 Modules = [NSDEBase]
-Pages   = ["rhs.jl", "ivp.jl", "odes.jl"]
+Pages   = ["odes.jl"]
+```
+
+## Index
+
+```@index
 ```
