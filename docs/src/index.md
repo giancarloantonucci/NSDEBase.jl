@@ -5,17 +5,10 @@
 
 ## Public API
 
-```@docs
-RightHandSideFunction
-```
-
-```@docs
-InitialValueProblem
-```
-
 ```@autodocs
 Modules = [NSDEBase]
-Pages   = ["odes.jl"]
+Pages   = ["rhs.jl", "ivp.jl", "odes.jl"]
+Filter  = name -> string(name) !== IVP || string(name) !== RHS
 ```
 
 ## Index
