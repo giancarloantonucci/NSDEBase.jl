@@ -2,7 +2,7 @@
 
 A Julia package containing shared types and functions of `NSDE` and related packages.
 
-[![Build Status](https://github.com/antonuccig/NSDEBase.jl/workflows/CI/badge.svg)](https://github.com/antonuccig/NSDEBase.jl/actions) [![Coverage](https://codecov.io/gh/antonuccig/NSDEBase.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/antonuccig/NSDEBase.jl)
+[![Docs Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://antonuccig.github.io/NSDEBase.jl/stable) [![Docs Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://antonuccig.github.io/NSDEBase.jl/dev) [![Build Status](https://img.shields.io/github/workflow/status/antonuccig/NSDEBase.jl/CI)](https://github.com/antonuccig/NSDEBase.jl/actions) [![Coverage](https://img.shields.io/codecov/c/github/antonuccig/NSDEBase.jl?label=codecov)](https://codecov.io/gh/antonuccig/NSDEBase.jl)
 
 ## Installation
 
