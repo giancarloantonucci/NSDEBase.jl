@@ -3,9 +3,6 @@ using NSDEBase
 
 PAGES = ["Home" => "index.md"]
 
-using InteractiveUtils
-display(versioninfo())
-
 makedocs(;
     sitename = "NSDEBase",
     format = Documenter.HTML(),
