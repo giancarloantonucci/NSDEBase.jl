@@ -6,12 +6,10 @@ version = "0.2.3"
 [deps]
 ArrowMacros = "46a4b217-d1c8-4502-9c1a-7bf73a71908c"
 ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
-Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 
 [compat]
 ArrowMacros = "0.1"
 ForwardDiff = "0.10"
-Suppressor = "0.2"
 julia = "1"
 
 [extras]
