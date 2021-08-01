@@ -2,15 +2,9 @@
     RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
 
 defines a constructor for the right-hand side of an `InitialValueProblem`.
-"""
-struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
-    f::f_T
-    f!::f!_T
-    Df::Df_T
-    Df!::Df!_T
-end
 
-"""
+---
+
     RightHandSideFunction(f, f!, Df, Df!) :: RightHandSideFunction
     RHS(args...; kwargs...) :: RightHandSideFunction
 
@@ -19,15 +13,23 @@ returns a `RightHandSideFunction` from:
 - `f!  :: Function` : right-hand side derivative (in-place).
 - `Df  :: Function` : jacobian of right-hand side derivative.
 - `Df! :: Function` : jacobian of right-hand side derivative (in-place).
-"""
-RightHandSideFunction(f::Function, f!::Function, Df::Function, Df!::Function)
 
-"""
+---
+
     RightHandSideFunction(f!_or_f::Function) :: RightHandSideFunction
     RHS(args...; kwargs...) :: RightHandSideFunction
 
 checks whether `f!_or_f` is in-place or not, and then returns a `RightHandSideFunction` with its fields defined accordingly.
 """
+struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
+    f::f_T
+    f!::f!_T
+    Df::Df_T
+    Df!::Df!_T
+end
+
+RightHandSideFunction(f::Function, f!::Function, Df::Function, Df!::Function)
+
 function RightHandSideFunction(f!_or_f::Function)
     # Check if f!_or_f has form f!(du, u, t)
     if hasmethod(f!_or_f, NTuple{3, Any})

@@ -3,5 +3,6 @@
 ## API
 
 ```@autodocs
-Pages = ["ivp.jl"]
+Modules = [NSDEBase]
+Pages   = ["rhs.jl", "ivp.jl", "odes.jl"]
 ```
