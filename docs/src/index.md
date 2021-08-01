@@ -8,7 +8,7 @@
 ```@autodocs
 Modules = [NSDEBase]
 Pages   = ["rhs.jl", "ivp.jl", "odes.jl"]
-Filter  = name -> string(name) != "NSDEBase.IVP" || string(name) != "NSDEBase.RHS"
+Filter  = name -> string(name) != "IVP" || string(name) != "RHS"
 ```
 
 ## Index
