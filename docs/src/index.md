@@ -3,21 +3,15 @@
 ```@contents
 ```
 
-## API
-
-### RHS
+## Public API
 
 ```@docs
 RightHandSideFunction
 ```
 
-### IVP
-
 ```@docs
 InitialValueProblem
 ```
-
-### ODEs
 
 ```@autodocs
 Modules = [NSDEBase]
