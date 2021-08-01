@@ -1,7 +1,7 @@
 # NSDEBase.jl
 
-Documentation for NSDEBase.jl
+## API
 
-```@docs
-InitialValueProblem
+```@autodocs
+Pages = ["ivp.jl"]
 ```
