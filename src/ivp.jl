@@ -1,24 +1,31 @@
+"An abstract type for solvers of [`InitialValueProblem`](@ref)s."
+abstract type InitialValueSolver <: NSDESolver end
+
+"An abstract type for solutions of [`InitialValueProblem`](@ref)s."
+abstract type InitialValueSolution <: NSDESolution end
+
 """
-    InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
+    InitialValueProblem <: NSDEProblem
 
-returns a composite type for initial value problems.
+A composite type for initial value problems.
 
----
+# Constructors
+```julia
+InitialValueProblem(rhs, u0, tspan)
+InitialValueProblem(rhs, u0, t0, tN)
+IVP(args...; kwargs...)
+```
 
-    InitialValueProblem(rhs, u0, tspan)
-    IVP(args...; kwargs...)
+# Arguments
+- `rhs :: Union{Function, RightHandSideFunction}` : right-hand side derivative.
+- `u0 :: Union{Number, AbstractVector{Number}}` : initial condition.
+- `tspan :: Tuple{Real, Real}` : time domain.
+- `t0 :: Real` : initial time.
+- `tN :: Real` : final time.
 
-returns an [`InitialValueProblem`](@ref) with:
-- `rhs   :: Union{Function, RightHandSideFunction}` : right-hand side derivative.
-- `u0    :: Union{Number, AbstractVector{Number}}`  : initial condition.
-- `tspan :: Tuple{Real, Real}`                      : time domain.
-
----
-
-    InitialValueProblem(rhs, u0, t0::Real, tN::Real)
-    IVP(args...; kwargs...)
-
-returns an [`InitialValueProblem`](@ref) with `tspan = (t0, tN)`.
+# Methods
+- [`show`](@ref) : shows name and contents.
+- [`summary`](@ref) : shows name.
 """
 struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
     rhs::rhs_T
@@ -33,14 +40,15 @@ InitialValueProblem(f::Function, u0, t0, tN) = InitialValueProblem(RHS(f), u0, t
 @doc (@doc InitialValueProblem) IVP(args...; kwargs...) = InitialValueProblem(args...; kwargs...)
 
 """
-    copy(problem::InitialValueProblem)
+    show(io::IO, problem::InitialValueProblem)
 
-returns a copy of `problem`.
+prints a full description of `problem` and its contents to a stream `io`.
 """
-function Base.copy(problem::InitialValueProblem)
-    @↓ rhs, u0, tspan = problem
-    return IVP(rhs, u0, tspan)
-end
-
-Base.summary(io::IO, problem::InitialValueProblem) = _summary(io, problem)
 Base.show(io::IO, problem::InitialValueProblem) = _show(io, problem)
+
+"""
+    summary(io::IO, problem::InitialValueProblem)
+
+prints a brief description of `problem` to a stream `io`.
+"""
+Base.summary(io::IO, problem::InitialValueProblem) = _summary(io, problem)

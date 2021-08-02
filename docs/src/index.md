@@ -10,7 +10,7 @@ Depth = 3
 
 ## API
 
-Only exported types and functions are considered a part of the public API of NSDEBase. All such objects should be documented in this manual.
+Only exported types and functions are considered part of the public API of NSDEBase. All such objects should be documented in this manual.
 
 ### Types
 
@@ -22,6 +22,14 @@ RightHandSideFunction
 InitialValueProblem
 InitialValueSolver
 InitialValueSolution
+```
+
+### Functions
+
+```@docs
+copy
+show
+summary
 ```
 
 ### ODEs

@@ -4,7 +4,7 @@ using NSDEBase
 PAGES = ["Home" => "index.md"]
 
 makedocs(;
-    sitename = "NSDEBase",
+    sitename = "NSDEBase.jl",
     format = Documenter.HTML(),
     modules = [NSDEBase],
     pages = PAGES,

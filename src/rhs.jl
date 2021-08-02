@@ -1,25 +1,25 @@
 """
-    RightHandSideFunction{f_T, f!_T, Df_T, Df!_T}
+    RightHandSideFunction
 
-returns a constructor for the right-hand side of an [`InitialValueProblem`](@ref).
+A composite type for the right-hand side of an [`InitialValueProblem`](@ref).
 
----
+# Constructors
+```julia
+RightHandSideFunction(f, f!, Df, Df!)
+RightHandSideFunction(f!_or_f)
+IVP(args...; kwargs...)
+```
 
-    RightHandSideFunction(f, f!, Df, Df!)
-    RHS(args...; kwargs...)
-
-returns a [`RightHandSideFunction`](@ref) with:
-- `f   :: Function` : right-hand side derivative.
-- `f!  :: Function` : right-hand side derivative (in-place).
-- `Df  :: Function` : jacobian of right-hand side derivative.
+# Arguments
+- `f :: Function` : right-hand side derivative.
+- `f! :: Function` : right-hand side derivative (in-place).
+- `Df :: Function` : jacobian of right-hand side derivative.
 - `Df! :: Function` : jacobian of right-hand side derivative (in-place).
+- `f!_or_f :: Function` : in-place or not, then the other fields are automatically constructed as appropriate.
 
----
-
-    RightHandSideFunction(f!_or_f::Function)
-    RHS(args...; kwargs...)
-
-checks whether `f!_or_f` is in-place or not, and then returns a [`RightHandSideFunction`](@ref) with its fields constructed accordingly.
+# Methods
+- [`show`](@ref) : shows name and contents.
+- [`summary`](@ref) : shows name.
 """
 struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T}
     f::f_T
@@ -48,7 +48,11 @@ end
 
 @doc (@doc RightHandSideFunction) RHS(args...; kwargs...) = RightHandSideFunction(args...; kwargs...)
 
-Base.summary(io::IO, rhs::RightHandSideFunction) = _summary(io, rhs)
+"""
+    show(io::IO, rhs::RightHandSideFunction)
+
+prints a full description of `problem` and its contents to a stream `io`.
+"""
 Base.show(io::IO, rhs::RightHandSideFunction) = _show(io, rhs)
 # function Base.show(io::IO, rhs::RightHandSideFunction)
 #     print(io, "RightHandSideFunction:")
@@ -63,3 +67,10 @@ Base.show(io::IO, rhs::RightHandSideFunction) = _show(io, rhs)
 #         end
 #     end
 # end
+
+"""
+    summary(io::IO, rhs::RightHandSideFunction)
+
+prints a brief description of `rhs` to a stream `io`.
+"""
+Base.summary(io::IO, rhs::RightHandSideFunction) = _summary(io, rhs)

@@ -1,4 +1,5 @@
-_summary(io::IO, object) = print(io, nameof(typeof(object)))
+function solve end
+function solve! end
 
 function _show(io::IO, object)
     print(io, nameof(typeof(object)), ":")
@@ -13,3 +14,5 @@ function _show(io::IO, object)
         end
     end
 end
+
+_summary(io::IO, object) = print(io, nameof(typeof(object)))
