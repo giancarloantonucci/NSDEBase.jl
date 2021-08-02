@@ -45,15 +45,15 @@ end
 Base.summary(io::IO, problem::InitialValueProblem) = print(io, "InitialValueProblem")
 
 function Base.show(io::IO, problem::InitialValueProblem)
-    print(io, "InitialValueProblem:\n")
+    print(io, "InitialValueProblem:")
     pad = get(io, :pad, "")
-    newline = get(io, :newline, "\n")
     names = propertynames(problem)
     N = length(names)
     for (n, name) in enumerate(names)
         field = getproperty(problem, name)
-        print(io, pad, "   ‣ " * string(name) * " := ")
-        show(IOContext(io, :pad => "   ", :newline => ""), field)
-        n == N ? print(io, newline) : print(io, "\n")
+        if field !== nothing
+            print(io, "\n", pad, "   ‣ " * string(name) * " ≔ ")
+            show(IOContext(io, :pad => "   "), field)
+        end
     end
 end
