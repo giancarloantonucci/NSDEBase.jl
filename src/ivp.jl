@@ -1,7 +1,7 @@
 """
     InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
 
-returns a constructor for an initial value problem.
+returns a composite type for initial value problems.
 
 ---
 
@@ -42,18 +42,5 @@ function Base.copy(problem::InitialValueProblem)
     return IVP(rhs, u0, tspan)
 end
 
-Base.summary(io::IO, problem::InitialValueProblem) = print(io, "InitialValueProblem")
-
-function Base.show(io::IO, problem::InitialValueProblem)
-    print(io, "InitialValueProblem:")
-    pad = get(io, :pad, "")
-    names = propertynames(problem)
-    N = length(names)
-    for (n, name) in enumerate(names)
-        field = getproperty(problem, name)
-        if field !== nothing
-            print(io, "\n", pad, "   ‣ " * string(name) * " ≔ ")
-            show(IOContext(io, :pad => "   "), field)
-        end
-    end
-end
+Base.summary(io::IO, problem::InitialValueProblem) = _summary(io, problem)
+Base.show(io::IO, problem::InitialValueProblem) = _show(io, problem)

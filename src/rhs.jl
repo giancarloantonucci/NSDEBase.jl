@@ -48,18 +48,18 @@ end
 
 @doc (@doc RightHandSideFunction) RHS(args...; kwargs...) = RightHandSideFunction(args...; kwargs...)
 
-Base.summary(io::IO, rhs::RightHandSideFunction) = print(io, "RightHandSideFunction")
-
-function Base.show(io::IO, rhs::RightHandSideFunction)
-    print(io, "RightHandSideFunction:")
-    pad = get(io, :pad, "")
-    names = propertynames(rhs)
-    N = length(names)
-    args(n) = (n == 1 ? "(u, t)" : n == 2 ? "(du, u, t)" : n == 3 ? "(u, t)" : "(J, du, u, t)")
-    for (n, name) in enumerate(names)
-        field = getproperty(rhs, name)
-        if field !== nothing
-            print(io, "\n", pad, "   ‣ " * string(name), args(n))
-        end
-    end
-end
+Base.summary(io::IO, rhs::RightHandSideFunction) = _summary(io, rhs)
+Base.show(io::IO, rhs::RightHandSideFunction) = _show(io, rhs)
+# function Base.show(io::IO, rhs::RightHandSideFunction)
+#     print(io, "RightHandSideFunction:")
+#     pad = get(io, :pad, "")
+#     names = propertynames(rhs)
+#     N = length(names)
+#     args(n) = (n == 1 ? "(u, t)" : n == 2 ? "(du, u, t)" : n == 3 ? "(u, t)" : "(J, du, u, t)")
+#     for (n, name) in enumerate(names)
+#         field = getproperty(rhs, name)
+#         if field !== nothing
+#             print(io, "\n", pad, "   ‣ " * string(name), args(n))
+#         end
+#     end
+# end
