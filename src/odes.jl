@@ -1,7 +1,7 @@
 """
     Dahlquist(u0 = 1.0, tspan = (0.0, 1.0); λ = 1.0) :: InitialValueProblem
 
-returns an `InitialValueProblem` for the Dahlquist equation.
+returns an [`InitialValueProblem`](@ref) for the Dahlquist equation.
 """
 function Dahlquist(u0 = 1.0, tspan = (0.0, 1.0); λ = 1.0)
     f!(du, u, t) = @. du = λ * u
@@ -11,7 +11,7 @@ end
 """
     Logistic(u0 = 0.5, tspan = (0.0, 5.0); λ = 1.0) :: InitialValueProblem
 
-returns an `InitialValueProblem` for the Logistic equation.
+returns an [`InitialValueProblem`](@ref) for the Logistic equation.
 """
 function Logistic(u0 = 0.5, tspan = (0.0, 5.0); λ = 1.0)
     f!(du, u, t) = @. du = λ * u * (1.0 - u)
@@ -21,7 +21,7 @@ end
 """
     Riccati(u0 = 0.0, tspan = (0.0, 5.0)) :: InitialValueProblem
 
-returns an `InitialValueProblem` for the Riccati equation.
+returns an [`InitialValueProblem`](@ref) for the Riccati equation.
 """
 function Riccati(u0 = 0.0, tspan = (0.0, 5.0))
     f!(du, u, t) = @. du = u - t * u^2 + t
@@ -31,7 +31,7 @@ end
 """
     SimplePendulum(u0 = [0.0, π/2], tspan = (0.0, 2π); g = 1.0, L = 1.0) :: InitialValueProblem
 
-returns an `InitialValueProblem` for the simple pendulum problem.
+returns an [`InitialValueProblem`](@ref) for the simple pendulum problem.
 """
 function SimplePendulum(u0 = [0.0, π/2], tspan = (0.0, 2π); g = 1.0, L = 1.0)
     function f!(du, u, t)
@@ -45,7 +45,7 @@ end
 """
     VanderPol(u0 = [1.0; 0.0], tspan = (0.0, 5.0); μ = 1.0) :: InitialValueProblem
 
-returns an `InitialValueProblem` for the Van der Pol equation (in first-order form).
+returns an [`InitialValueProblem`](@ref) for the Van der Pol equation (in first-order form).
 """
 function VanderPol(u0 = [1.0; 0.0], tspan = (0.0, 5.0); μ = 1.0)
     function f!(du, u, t)
@@ -59,7 +59,7 @@ end
 """
     Rössler(u0 = [2.0, 0.0, 0.0], tspan = (0.0, 10.0); a = 0.2, b = 0.2, c = 5.7) :: InitialValueProblem
 
-returns an `InitialValueProblem` for the Rössler equations.
+returns an [`InitialValueProblem`](@ref) for the Rössler equations.
 """
 function Rössler(u0 = [2.0, 0.0, 0.0], tspan = (0.0, 10.0); a = 0.2, b = 0.2, c = 5.7)
     function f!(du, u, t)
@@ -74,7 +74,7 @@ end
 """
     Lorenz(u0 = [2.0, 3.0, -14.0], tspan = (0.0, 10.0); σ = 10.0, β = 8/3, ρ = 28.0) :: InitialValueProblem
 
-returns an `InitialValueProblem` for the Lorenz equations.
+returns an [`InitialValueProblem`](@ref) for the Lorenz equations.
 """
 function Lorenz(u0 = [2.0, 3.0, -14.0], tspan = (0.0, 10.0); σ = 10.0, β = 8/3, ρ = 28.0)
     function f!(du, u, t)
@@ -89,7 +89,7 @@ end
 """
     Lorenz96(u0, tspan; F = 8) :: InitialValueProblem
 
-returns an `InitialValueProblem` for the Rössler equations.
+returns an [`InitialValueProblem`](@ref) for the Rössler equations.
 """
 function Lorenz96(u0 = [1.01; ones(40)], tspan = (0.0, 10.0); F = 8)
     N = length(u0)

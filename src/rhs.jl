@@ -1,14 +1,14 @@
 """
     RightHandSideFunction{f_T, f!_T, Df_T, Df!_T}
 
-returns a constructor for the right-hand side of an `InitialValueProblem`.
+returns a constructor for the right-hand side of an [`InitialValueProblem`](@ref).
 
 ---
 
     RightHandSideFunction(f, f!, Df, Df!)
     RHS(args...; kwargs...)
 
-returns a `RightHandSideFunction` with:
+returns a [`RightHandSideFunction`](@ref) with:
 - `f   :: Function` : right-hand side derivative.
 - `f!  :: Function` : right-hand side derivative (in-place).
 - `Df  :: Function` : jacobian of right-hand side derivative.
@@ -19,7 +19,7 @@ returns a `RightHandSideFunction` with:
     RightHandSideFunction(f!_or_f::Function)
     RHS(args...; kwargs...)
 
-checks whether `f!_or_f` is in-place or not, and then returns a `RightHandSideFunction` with its fields constructed accordingly.
+checks whether `f!_or_f` is in-place or not, and then returns a [`RightHandSideFunction`](@ref) with its fields constructed accordingly.
 """
 struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T}
     f::f_T

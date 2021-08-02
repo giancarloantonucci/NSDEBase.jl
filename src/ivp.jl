@@ -8,7 +8,7 @@ returns a constructor for an initial value problem.
     InitialValueProblem(rhs, u0, tspan)
     IVP(args...; kwargs...)
 
-returns an `InitialValueProblem` with:
+returns an [`InitialValueProblem`](@ref) with:
 - `rhs   :: Union{Function, RightHandSideFunction}` : right-hand side derivative.
 - `u0    :: Union{Number, AbstractVector{Number}}`  : initial condition.
 - `tspan :: Tuple{Real, Real}`                      : time domain.
@@ -18,7 +18,7 @@ returns an `InitialValueProblem` with:
     InitialValueProblem(rhs, u0, t0::Real, tN::Real)
     IVP(args...; kwargs...)
 
-returns an `InitialValueProblem` with `tspan = (t0, tN)`.
+returns an [`InitialValueProblem`](@ref) with `tspan = (t0, tN)`.
 """
 struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
     rhs::rhs_T
