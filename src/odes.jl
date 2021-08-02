@@ -91,7 +91,7 @@ end
 
 returns an `InitialValueProblem` for the Rössler equations.
 """
-function Lorenz96(u0, tspan; F = 8)
+function Lorenz96(u0 = [1.01; ones(40)], tspan = (0.0, 10.0); F = 8)
     N = length(u0)
     if N < 4
         error("Lorenz96 requires N ≥ 4.")
