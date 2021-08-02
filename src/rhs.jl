@@ -1,5 +1,5 @@
 """
-    RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
+    RightHandSideFunction{f_T, f!_T, Df_T, Df!_T}
 
 returns a constructor for the right-hand side of an `InitialValueProblem`.
 
@@ -21,7 +21,7 @@ returns a `RightHandSideFunction` with:
 
 checks whether `f!_or_f` is in-place or not, and then returns a `RightHandSideFunction` with its fields constructed accordingly.
 """
-struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: InitialValueParameters
+struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T}
     f::f_T
     f!::f!_T
     Df::Df_T
