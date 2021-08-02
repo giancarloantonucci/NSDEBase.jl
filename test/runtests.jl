@@ -24,6 +24,7 @@ end
     @test Riccati() isa InitialValueProblem
     @test SimplePendulum() isa InitialValueProblem
     @test VanderPol() isa InitialValueProblem
-    @test Lorenz() isa InitialValueProblem
     @test Rössler() isa InitialValueProblem
+    @test Lorenz() isa InitialValueProblem
+    @test Lorenz96() isa InitialValueProblem
 end
