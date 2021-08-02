@@ -5,17 +5,24 @@
 
 ## Public API
 
-```@docs
-RightHandSideFunction
-```
+### Constructors
 
 ```@docs
+RightHandSideFunction
 InitialValueProblem
 ```
 
-```@autodocs
-Modules = [NSDEBase]
-Pages   = ["odes.jl"]
+### ODEs
+
+```@docs
+Dahlquist
+Logistic
+Riccati
+SimplePendulum
+VanderPol
+Rössler
+Lorenz
+Lorenz96
 ```
 
 ## Index
