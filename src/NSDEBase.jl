@@ -9,13 +9,13 @@ export solve, solve!
 using ArrowMacros
 using ForwardDiff
 
-"An abstract type for problems."
+"An abstract type for the problems from [NSDE.jl](https://github.com/antonuccig/NSDE.jl)."
 abstract type NSDEProblem end
 
-"An abstract type for solvers."
+"An abstract type for the solvers from [NSDE.jl](https://github.com/antonuccig/NSDE.jl)."
 abstract type NSDESolver end
 
-"An abstract type for solutions."
+"An abstract type for the solutions from [NSDE.jl](https://github.com/antonuccig/NSDE.jl)."
 abstract type NSDESolution end
 
 include("utils.jl")

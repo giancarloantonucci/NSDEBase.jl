@@ -15,9 +15,9 @@ IVP(args...; kwargs...)
 - `f! :: Function` : right-hand side derivative (in-place).
 - `Df :: Function` : jacobian of right-hand side derivative.
 - `Df! :: Function` : jacobian of right-hand side derivative (in-place).
-- `f!_or_f :: Function` : in-place or not, then the other fields are automatically constructed as appropriate.
+- `f!_or_f :: Function` : function (in-place or not) from which all other fields are automatically constructed.
 
-# Methods
+# Functions
 - [`show`](@ref) : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
@@ -47,6 +47,10 @@ function RightHandSideFunction(f!_or_f::Function)
 end
 
 @doc (@doc RightHandSideFunction) RHS(args...; kwargs...) = RightHandSideFunction(args...; kwargs...)
+
+# ---------------------------------------------------------------------------- #
+#                                   Functions                                  #
+# ---------------------------------------------------------------------------- #
 
 """
     show(io::IO, rhs::RightHandSideFunction)

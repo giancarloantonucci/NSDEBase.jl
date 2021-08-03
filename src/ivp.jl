@@ -1,7 +1,7 @@
-"An abstract type for solvers of [`InitialValueProblem`](@ref)s."
+"An abstract type for the solvers of [`InitialValueProblem`](@ref)s."
 abstract type InitialValueSolver <: NSDESolver end
 
-"An abstract type for solutions of [`InitialValueProblem`](@ref)s."
+"An abstract type for the solution of an [`InitialValueProblem`](@ref)."
 abstract type InitialValueSolution <: NSDESolution end
 
 """
@@ -23,7 +23,7 @@ IVP(args...; kwargs...)
 - `t0 :: Real` : initial time.
 - `tN :: Real` : final time.
 
-# Methods
+# Functions
 - [`show`](@ref) : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
@@ -38,6 +38,10 @@ InitialValueProblem(f::Function, u0, tspan) = InitialValueProblem(RHS(f), u0, ts
 InitialValueProblem(rhs::RightHandSideFunction, u0, t0::Real, tN::Real) = InitialValueProblem(rhs, u0, (t0, tN))
 InitialValueProblem(f::Function, u0, t0, tN) = InitialValueProblem(RHS(f), u0, t0, tN)
 @doc (@doc InitialValueProblem) IVP(args...; kwargs...) = InitialValueProblem(args...; kwargs...)
+
+# ---------------------------------------------------------------------------- #
+#                                   Functions                                  #
+# ---------------------------------------------------------------------------- #
 
 """
     show(io::IO, problem::InitialValueProblem)
