@@ -10,7 +10,7 @@ Depth = 3
 
 ## API
 
-Only exported types and functions are considered part of the public API of NSDEBase. All such objects should be documented in this manual.
+All exported types and functions are considered part of the public API and thus documented in this manual.
 
 ### Types
 
