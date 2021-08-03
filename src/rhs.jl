@@ -51,7 +51,7 @@ end
 """
     show(io::IO, rhs::RightHandSideFunction)
 
-prints a full description of `problem` and its contents to a stream `io`.
+prints a full description of `rhs` and its contents to a stream `io`.
 """
 Base.show(io::IO, rhs::RightHandSideFunction) = _show(io, rhs)
 # function Base.show(io::IO, rhs::RightHandSideFunction)

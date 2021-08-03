@@ -24,14 +24,6 @@ InitialValueSolver
 InitialValueSolution
 ```
 
-### Functions
-
-```@docs
-copy
-show
-summary
-```
-
 ### ODEs
 
 ```@docs
@@ -43,6 +35,13 @@ VanderPol
 Rössler
 Lorenz
 Lorenz96
+```
+
+### Utilities
+
+```@docs
+show
+summary
 ```
 
 ## Index
