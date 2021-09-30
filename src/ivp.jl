@@ -17,7 +17,7 @@ IVP(args...; kwargs...)
 ```
 
 # Arguments
-- `rhs :: Union{Function, RightHandSideFunction}` : right-hand side derivative.
+- `rhs :: Union{Function, RightHandSideFunction, SplitRightHandSideFunction}` : right-hand side derivative.
 - `u0 :: Union{Number, AbstractVector{Number}}` : initial condition.
 - `tspan :: Tuple{Real, Real}` : time domain.
 - `t0 :: Real` : initial time.
@@ -33,8 +33,12 @@ struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
     tspan::tspan_T
 end
 
+InitialValueProblem(L, rhs::RightHandSideFunction, u0, tspan) = InitialValueProblem(SRHS(L, rhs), u0, tspan)
+InitialValueProblem(L, f::Function, u0, tspan) = InitialValueProblem(L, RHS(f), u0, tspan)
 InitialValueProblem(rhs::RightHandSideFunction, u0::Number, tspan) = InitialValueProblem(rhs, [u0], tspan)
 InitialValueProblem(f::Function, u0, tspan) = InitialValueProblem(RHS(f), u0, tspan)
+
+InitialValueProblem(L, rhs, u0, t0::Real, tN::Real) = InitialValueProblem(L, rhs, u0, (t0, tN))
 InitialValueProblem(rhs::RightHandSideFunction, u0, t0::Real, tN::Real) = InitialValueProblem(rhs, u0, (t0, tN))
 InitialValueProblem(f::Function, u0, t0, tN) = InitialValueProblem(RHS(f), u0, t0, tN)
 @doc (@doc InitialValueProblem) IVP(args...; kwargs...) = InitialValueProblem(args...; kwargs...)

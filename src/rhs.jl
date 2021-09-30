@@ -7,7 +7,7 @@ A composite type for the right-hand side of an [`InitialValueProblem`](@ref).
 ```julia
 RightHandSideFunction(f, f!, Df, Df!)
 RightHandSideFunction(f!_or_f)
-IVP(args...; kwargs...)
+RHS(args...; kwargs...)
 ```
 
 # Arguments
@@ -28,21 +28,59 @@ struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T}
     Df!::Df!_T
 end
 
-function RightHandSideFunction(f!_or_f::Function)
-    # Check if f!_or_f has form f!(du, u, t)
-    if hasmethod(f!_or_f, NTuple{3, Any})
-        f! = f!_or_f
-        f = (u, t) -> f!_or_f(similar(u), u, t)
-        Df = (u, t) -> ForwardDiff.jacobian((du, u) -> f!_or_f(du, u, t), similar(u), u)
-        Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, (du, u) -> f!_or_f(du, u, t), du, u)
-        return RightHandSideFunction(f, f!, Df, Df!)
-    # Check if f!_or_f has form f(u, t)
-    elseif hasmethod(f!_or_f, NTuple{2, Any})
-        f = f!_or_f
-        f! = (du, u, t) -> du .= f!_or_f(u, t)
-        Df = (u, t) -> ForwardDiff.jacobian(u -> f!_or_f(u, t), u)
-        Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, u -> f!_or_f(u, t), u)
-        return RightHandSideFunction(f, f!, Df, Df!)
+function RightHandSideFunction(f!_or_f::Function; is_complex = false)
+    if is_complex
+        # Jacobian using Wirtinger derivatives
+        # https://math.stackexchange.com/questions/2945446/understanding-the-chain-rule-in-the-wirtinger-calculus
+        # possible alternative: use reinterpret
+        if hasmethod(f!_or_f, NTuple{3, Any})
+            f! = f!_or_f
+            f = (u, t) -> f!_or_f(similar(u), u, t)
+            Df = function (u, t)
+                J_ = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+                n = length(u)
+                P = kron(Matrix(I, n, n), 0.5 * [1.0 -1.0im; 1.0 1.0im])
+                J = ((P * J_) / P)[1:2:2*n-1, 1:2:2*n-1]
+                return J
+            end
+            Df! = function (J, du, u, t)
+                J .= Df(u, t)
+                return J
+            end
+            return RightHandSideFunction(f, f!, Df, Df!)
+        # Check if f!_or_f has form f(u, t)
+        elseif hasmethod(f!_or_f, NTuple{2, Any})
+            f = f!_or_f
+            f! = (du, u, t) -> du .= f!_or_f(u, t)
+            Df = function (u, t)
+                J_ = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+                n = length(u)
+                P = kron(Matrix(I, n, n), 0.5 * [1.0 -1.0im; 1.0 1.0im])
+                J = ((P * J_) / P)[1:2:2*n-1, 1:2:2*n-1]
+                return J
+            end
+            Df! = function (J, du, u, t)
+                J .= Df(u, t)
+                return J
+            end
+            return RightHandSideFunction(f, f!, Df, Df!)
+        end
+    else
+        # Check if f!_or_f has form f!(du, u, t)
+        if hasmethod(f!_or_f, NTuple{3, Any})
+            f! = f!_or_f
+            f = (u, t) -> f!_or_f(similar(u), u, t)
+            Df = (u, t) -> ForwardDiff.jacobian((du, u) -> f!_or_f(du, u, t), similar(u), u)
+            Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, (du, u) -> f!_or_f(du, u, t), du, u)
+            return RightHandSideFunction(f, f!, Df, Df!)
+        # Check if f!_or_f has form f(u, t)
+        elseif hasmethod(f!_or_f, NTuple{2, Any})
+            f = f!_or_f
+            f! = (du, u, t) -> du .= f!_or_f(u, t)
+            Df = (u, t) -> ForwardDiff.jacobian(u -> f!_or_f(u, t), u)
+            Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, u -> f!_or_f(u, t), u)
+            return RightHandSideFunction(f, f!, Df, Df!)
+        end
     end
 end
 

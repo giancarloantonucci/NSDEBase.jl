@@ -87,7 +87,7 @@ function Lorenz(u0 = [2.0, 3.0, -14.0], tspan = (0.0, 10.0); σ = 10.0, β = 8/3
 end
 
 """
-    Lorenz96(u0, tspan; F = 8) :: InitialValueProblem
+    Lorenz96(u0 = [1.01; ones(40)], tspan = (0.0, 10.0); F = 8) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Rössler equations.
 """

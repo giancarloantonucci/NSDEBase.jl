@@ -7,7 +7,9 @@ export Dahlquist, Logistic, Riccati, SimplePendulum, VanderPol, Rössler, Lorenz
 export solve, solve!
 
 using ArrowMacros
+using LinearAlgebra
 using ForwardDiff
+using FiniteDifferences
 
 "An abstract type for the problems from [NSDE.jl](https://github.com/antonuccig/NSDE.jl)."
 abstract type NSDEProblem end
@@ -20,6 +22,7 @@ abstract type NSDESolution end
 
 include("utils.jl")
 include("rhs.jl")
+include("srhs.jl")
 include("ivp.jl")
 include("odes.jl")
 
