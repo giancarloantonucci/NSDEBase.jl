@@ -12,5 +12,5 @@ makedocs(;
 )
 
 deploydocs(;
-    repo = "https://github.com/antonuccig/NSDEBase.jl"
+    repo = "https://github.com/giancarloantonucci/NSDEBase.jl"
 )

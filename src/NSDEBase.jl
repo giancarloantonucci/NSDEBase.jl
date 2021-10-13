@@ -3,7 +3,7 @@ module NSDEBase
 export NSDEProblem, NSDESolver, NSDESolution
 export RightHandSideFunction, RHS
 export InitialValueProblem, IVP, InitialValueSolver, InitialValueSolution
-export Dahlquist, Logistic, Riccati, SimplePendulum, VanderPol, Rössler, Lorenz, Lorenz96
+export Dahlquist, Logistic, SimplePendulum, VanderPol, Rössler, Lorenz, Lorenz96
 export solve, solve!
 
 using ArrowMacros

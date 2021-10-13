@@ -1,6 +1,6 @@
 # NSDEBase.jl
 
-This is the documentation of [NSDEBase.jl](https://github.com/antonuccig/NSDEBase.jl), a Julia package containing shared types and functions of [NSDE.jl](https://github.com/antonuccig/NSDE.jl) and its sub-packages.
+This is the documentation of [NSDEBase.jl](https://github.com/giancarloantonucci/NSDEBase.jl), a Julia package containing shared types and functions of [NSDE.jl](https://github.com/giancarloantonucci/NSDE.jl) and its sub-packages.
 
 ## Manual
 
