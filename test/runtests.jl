@@ -18,7 +18,6 @@ end
 @testset "ODEs" begin
     @test Dahlquist() isa InitialValueProblem
     @test Logistic() isa InitialValueProblem
-    @test Riccati() isa InitialValueProblem
     @test SimplePendulum() isa InitialValueProblem
     @test VanderPol() isa InitialValueProblem
     @test Rössler() isa InitialValueProblem
