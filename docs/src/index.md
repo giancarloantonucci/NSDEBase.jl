@@ -29,7 +29,6 @@ InitialValueSolution
 ```@docs
 Dahlquist
 Logistic
-Riccati
 SimplePendulum
 VanderPol
 Rössler
