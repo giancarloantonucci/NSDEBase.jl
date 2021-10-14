@@ -21,7 +21,7 @@ IVP(args...; kwargs...)
 - [`show`](@ref) : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
-struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: AbstractInitialValueProblem
+mutable struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: AbstractInitialValueProblem
     rhs::rhs_T
     u0::u0_T
     tspan::tspan_T
