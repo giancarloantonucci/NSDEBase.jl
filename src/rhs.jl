@@ -1,7 +1,7 @@
 """
-    RightHandSideFunction
+    RightHandSideFunction <: AbstractRightHandSideFunction
 
-A composite type for the right-hand side of an [`InitialValueProblem`](@ref).
+A composite type for the right-hand side of an [`AbstractInitialValueProblem`](@ref).
 
 # Constructors
 ```julia
@@ -21,7 +21,7 @@ RHS(args...; kwargs...)
 - [`show`](@ref) : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
-struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T}
+struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: AbstractRightHandSideFunction
     f::f_T
     f!::f!_T
     Df::Df_T

@@ -12,16 +12,24 @@ Depth = 3
 
 All exported types and functions are considered part of the public API and thus documented in this manual.
 
-### Types
+### Abstract types
 
 ```@docs
-NSDEProblem
-NSDESolver
-NSDESolution
-RightHandSideFunction
+AbstractNSDEProblem
+AbstractNSDESolver
+AbstractNSDESolution
+AbstractInitialValueProblem
+AbstractInitialValueSolver
+AbstractInitialValueSolution
+AbstractRightHandSideFunction
+```
+
+### Composite types
+
+```@docs
 InitialValueProblem
-InitialValueSolver
-InitialValueSolution
+RightHandSideFunction
+SplitRightHandSideFunction
 ```
 
 ### ODEs

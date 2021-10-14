@@ -1,13 +1,7 @@
-"An abstract type for the solvers of [`InitialValueProblem`](@ref)s."
-abstract type InitialValueSolver <: NSDESolver end
-
-"An abstract type for the solution of an [`InitialValueProblem`](@ref)."
-abstract type InitialValueSolution <: NSDESolution end
-
 """
-    InitialValueProblem <: NSDEProblem
+    InitialValueProblem <: AbstractInitialValueProblem
 
-A composite type for initial value problems.
+A composite type for an [`AbstractInitialValueProblem`](@ref).
 
 # Constructors
 ```julia
@@ -17,7 +11,7 @@ IVP(args...; kwargs...)
 ```
 
 # Arguments
-- `rhs :: Union{Function, RightHandSideFunction, SplitRightHandSideFunction}` : right-hand side derivative.
+- `rhs :: Union{Function, AbstractRightHandSideFunction}` : right-hand side derivative.
 - `u0 :: Union{Number, AbstractVector{Number}}` : initial condition.
 - `tspan :: Tuple{Real, Real}` : time domain.
 - `t0 :: Real` : initial time.
@@ -27,19 +21,15 @@ IVP(args...; kwargs...)
 - [`show`](@ref) : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
-struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: NSDEProblem
+struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: AbstractInitialValueProblem
     rhs::rhs_T
     u0::u0_T
     tspan::tspan_T
 end
 
-InitialValueProblem(L, rhs::RightHandSideFunction, u0, tspan) = InitialValueProblem(SRHS(L, rhs), u0, tspan)
-InitialValueProblem(L, f::Function, u0, tspan) = InitialValueProblem(L, RHS(f), u0, tspan)
-InitialValueProblem(rhs::RightHandSideFunction, u0::Number, tspan) = InitialValueProblem(rhs, [u0], tspan)
+InitialValueProblem(rhs::AbstractRightHandSideFunction, u0::Number, tspan) = InitialValueProblem(rhs, [u0], tspan)
 InitialValueProblem(f::Function, u0, tspan) = InitialValueProblem(RHS(f), u0, tspan)
-
-InitialValueProblem(L, rhs, u0, t0::Real, tN::Real) = InitialValueProblem(L, rhs, u0, (t0, tN))
-InitialValueProblem(rhs::RightHandSideFunction, u0, t0::Real, tN::Real) = InitialValueProblem(rhs, u0, (t0, tN))
+InitialValueProblem(rhs::AbstractRightHandSideFunction, u0, t0::Real, tN::Real) = InitialValueProblem(rhs, u0, (t0, tN))
 InitialValueProblem(f::Function, u0, t0, tN) = InitialValueProblem(RHS(f), u0, t0, tN)
 @doc (@doc InitialValueProblem) IVP(args...; kwargs...) = InitialValueProblem(args...; kwargs...)
 

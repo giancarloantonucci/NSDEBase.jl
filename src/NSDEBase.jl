@@ -1,25 +1,42 @@
 module NSDEBase
 
-export NSDEProblem, NSDESolver, NSDESolution
+############################################################################################
+#                                         EXPORTS                                          #
+############################################################################################
+
+export AbstractNSDEProblem
+export AbstractNSDESolver
+export AbstractNSDESolution
+
+export AbstractInitialValueProblem
+export AbstractInitialValueSolver
+export AbstractInitialValueSolution
+export AbstractRightHandSideFunction
+
+export InitialValueProblem, IVP
 export RightHandSideFunction, RHS
-export InitialValueProblem, IVP, InitialValueSolver, InitialValueSolution
-export Dahlquist, Logistic, SimplePendulum, VanderPol, Rössler, Lorenz, Lorenz96
+export SplitRightHandSideFunction, SRHS
+
+export Dahlquist
+export Logistic
+export SimplePendulum
+export VanderPol
+export Rössler
+export Lorenz
+export Lorenz96
+
 export solve, solve!
+
+############################################################################################
+#                                           CORE                                           #
+############################################################################################
 
 using ArrowMacros
 using LinearAlgebra
 using ForwardDiff
 using FiniteDifferences
 
-"An abstract type for the problems from [NSDE.jl](https://github.com/antonuccig/NSDE.jl)."
-abstract type NSDEProblem end
-
-"An abstract type for the solvers from [NSDE.jl](https://github.com/antonuccig/NSDE.jl)."
-abstract type NSDESolver end
-
-"An abstract type for the solutions from [NSDE.jl](https://github.com/antonuccig/NSDE.jl)."
-abstract type NSDESolution end
-
+include("abstract.jl")
 include("utils.jl")
 include("rhs.jl")
 include("srhs.jl")

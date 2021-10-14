@@ -1,7 +1,7 @@
 """
-    SplitRightHandSideFunction
+    SplitRightHandSideFunction <: AbstractRightHandSideFunction
 
-A composite type for the split right-hand side of an [`InitialValueProblem`](@ref).
+A composite type for the split right-hand side of an [`AbstractInitialValueProblem`](@ref).
 
 # Constructors
 ```julia
@@ -13,7 +13,7 @@ SRHS(args...; kwargs...)
 - `L :: Union{Number, Matrix}` : linear part of right-hand side derivative.
 - `rhs :: RightHandSideFunction` : nonlinear part of right-hand side derivative.
 """
-struct SplitRightHandSideFunction{L_T, rhs_T}
+struct SplitRightHandSideFunction{L_T, rhs_T} <: AbstractRightHandSideFunction
     L::L_T
     rhs::rhs_T
 end
