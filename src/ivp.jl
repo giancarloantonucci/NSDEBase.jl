@@ -11,14 +11,14 @@ IVP(args...; kwargs...)
 ```
 
 # Arguments
-- `rhs :: Union{Function, AbstractRightHandSideFunction}` : right-hand side derivative.
-- `u0 :: Union{Number, AbstractVector{Number}}` : initial condition.
-- `tspan :: Tuple{Real, Real}` : time domain.
-- `t0 :: Real` : initial time.
-- `tN :: Real` : final time.
+- `rhs   :: Union{Function, AbstractRightHandSideFunction}` : right-hand side derivative.
+- `u0    :: Union{Number, AbstractVector{Number}}`          : initial condition.
+- `tspan :: Tuple{Real, Real}`                              : time domain.
+- `t0    :: Real`                                           : initial time.
+- `tN    :: Real`                                           : final time.
 
 # Functions
-- [`show`](@ref) : shows name and contents.
+- [`show`   ](@ref) : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
 mutable struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: AbstractInitialValueProblem
@@ -33,9 +33,9 @@ InitialValueProblem(rhs::AbstractRightHandSideFunction, u0, t0::Real, tN::Real) 
 InitialValueProblem(f::Function, u0, t0, tN) = InitialValueProblem(RHS(f), u0, t0, tN)
 @doc (@doc InitialValueProblem) IVP(args...; kwargs...) = InitialValueProblem(args...; kwargs...)
 
-# ---------------------------------------------------------------------------- #
-#                                   Functions                                  #
-# ---------------------------------------------------------------------------- #
+############################################################################################
+#                                         PRINTING                                         #
+############################################################################################
 
 """
     show(io::IO, problem::InitialValueProblem)

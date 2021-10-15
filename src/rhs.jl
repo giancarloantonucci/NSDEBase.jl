@@ -11,14 +11,14 @@ RHS(args...; kwargs...)
 ```
 
 # Arguments
-- `f :: Function` : right-hand side derivative.
-- `f! :: Function` : right-hand side derivative (in-place).
-- `Df :: Function` : jacobian of right-hand side derivative.
-- `Df! :: Function` : jacobian of right-hand side derivative (in-place).
-- `f!_or_f :: Function` : function (in-place or not) from which all other fields are automatically constructed.
+- `f       :: Function` : right-hand side derivative.
+- `f!      :: Function` : right-hand side derivative (in-place).
+- `Df      :: Function` : jacobian of right-hand side derivative.
+- `Df!     :: Function` : jacobian of right-hand side derivative (in-place).
+- `f!_or_f :: Function` : function (in-place or not) from which all other fields will be constructed.
 
 # Functions
-- [`show`](@ref) : shows name and contents.
+- [`show`   ](@ref) : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
 mutable struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: AbstractRightHandSideFunction
@@ -28,10 +28,9 @@ mutable struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: AbstractRightHan
     Df!::Df!_T
 end
 
-function RightHandSideFunction(f!_or_f::Function; is_complex = false)
-    if is_complex
-        # Jacobian using Wirtinger derivatives
-        # https://math.stackexchange.com/questions/2945446/understanding-the-chain-rule-in-the-wirtinger-calculus
+function RightHandSideFunction(f!_or_f::Function; iscomplex = false)
+    if iscomplex
+        # Jacobian using Wirtinger derivatives: https://math.stackexchange.com/questions/2945446/understanding-the-chain-rule-in-the-wirtinger-calculus
         # possible alternative: use reinterpret
         if hasmethod(f!_or_f, NTuple{3, Any})
             f! = f!_or_f
@@ -86,9 +85,9 @@ end
 
 @doc (@doc RightHandSideFunction) RHS(args...; kwargs...) = RightHandSideFunction(args...; kwargs...)
 
-# ---------------------------------------------------------------------------- #
-#                                   Functions                                  #
-# ---------------------------------------------------------------------------- #
+############################################################################################
+#                                         PRINTING                                         #
+############################################################################################
 
 """
     show(io::IO, rhs::RightHandSideFunction)
