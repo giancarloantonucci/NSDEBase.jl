@@ -19,8 +19,8 @@ AbstractNSDEProblem
 AbstractNSDESolver
 AbstractNSDESolution
 AbstractInitialValueProblem
-AbstractInitialValueSolver
 AbstractInitialValueSolution
+AbstractInitialValueSolver
 AbstractRightHandSideFunction
 ```
 
