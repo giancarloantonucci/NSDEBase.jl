@@ -14,34 +14,23 @@ All exported types and functions are considered part of the public API and thus 
 
 ### Abstract types
 
-```@docs
-AbstractNSDEProblem
-AbstractNSDESolution
-AbstractNSDESolver
-AbstractInitialValueProblem
-AbstractInitialValueSolution
-AbstractInitialValueSolver
-AbstractRightHandSideFunction
+```@autodocs
+Modules = [NSDEBase]
+Pages   = [abstract.jl"]
 ```
 
 ### Composite types
 
 ```@docs
-InitialValueProblem
-RightHandSideFunction
-SplitRightHandSideFunction
+Modules = [NSDEBase]
+Pages   = ["ivp.jl", "rhs.jl", "srhs.jl"]
 ```
 
 ### ODEs
 
 ```@docs
-Dahlquist
-Logistic
-SimplePendulum
-VanderPol
-Rössler
-Lorenz
-Lorenz96
+Modules = [NSDEBase]
+Pages   = ["odes.jl"]
 ```
 
 ### Utilities
