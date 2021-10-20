@@ -16,7 +16,7 @@ All exported types and functions are considered part of the public API and thus 
 
 ```@autodocs
 Modules = [NSDEBase]
-Pages = [abstract.jl"]
+Pages = ["abstract.jl"]
 ```
 
 ### Composite types
