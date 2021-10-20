@@ -16,8 +16,8 @@ All exported types and functions are considered part of the public API and thus 
 
 ```@docs
 AbstractNSDEProblem
-AbstractNSDESolver
 AbstractNSDESolution
+AbstractNSDESolver
 AbstractInitialValueProblem
 AbstractInitialValueSolution
 AbstractInitialValueSolver

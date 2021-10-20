@@ -8,7 +8,6 @@ export AbstractNSDEProblem
 export AbstractNSDESolution
 export AbstractNSDESolver
 
-
 export AbstractInitialValueProblem
 export AbstractInitialValueSolution
 export AbstractInitialValueSolver
