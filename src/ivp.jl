@@ -11,14 +11,14 @@ IVP(args...; kwargs...)
 ```
 
 # Arguments
-- `rhs   :: Union{Function, AbstractRightHandSideFunction}` : right-hand side derivative.
-- `u0    :: Union{Number, AbstractVector{Number}}`          : initial condition.
-- `tspan :: Tuple{Real, Real}`                              : time domain.
-- `t0    :: Real`                                           : initial time.
-- `tN    :: Real`                                           : final time.
+- `rhs :: Union{Function, AbstractRightHandSideFunction}` : right-hand side derivative.
+- `u0 :: Union{Number, AbstractVector{Number}}` : initial condition.
+- `tspan :: Tuple{Real, Real}` : time domain.
+- `t0 :: Real` : initial time.
+- `tN :: Real` : final time.
 
 # Functions
-- [`show`   ](@ref) : shows name and contents.
+- [`show`](@ref) : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
 mutable struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: AbstractInitialValueProblem
