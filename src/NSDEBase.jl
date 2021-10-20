@@ -5,12 +5,12 @@ module NSDEBase
 ############################################################################################
 
 export AbstractNSDEProblem
-export AbstractNSDESolution
 export AbstractNSDESolver
+export AbstractNSDESolution
 
 export AbstractInitialValueProblem
-export AbstractInitialValueSolution
 export AbstractInitialValueSolver
+export AbstractInitialValueSolution
 export AbstractRightHandSideFunction
 
 export InitialValueProblem, IVP
