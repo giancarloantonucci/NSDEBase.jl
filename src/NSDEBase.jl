@@ -1,8 +1,19 @@
 module NSDEBase
 
-#####
-##### Exports
-#####
+using ArrowMacros
+using LinearAlgebra
+using ForwardDiff
+using FiniteDifferences
+
+function solve end
+function solve! end
+
+include("abstract.jl")
+include("object.jl")
+include("rhs.jl")
+include("srhs.jl")
+include("ivp.jl")
+include("odes.jl")
 
 export AbstractNSDEObject
 export AbstractNSDEProblem
@@ -26,24 +37,5 @@ export Lorenz
 export Lorenz96
 
 export solve, solve!
-
-#####
-##### Core
-#####
-
-using ArrowMacros
-using LinearAlgebra
-using ForwardDiff
-using FiniteDifferences
-
-function solve end
-function solve! end
-
-include("abstract.jl")
-include("object.jl")
-include("rhs.jl")
-include("srhs.jl")
-include("ivp.jl")
-include("odes.jl")
 
 end
