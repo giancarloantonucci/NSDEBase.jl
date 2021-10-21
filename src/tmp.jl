@@ -1,6 +1,3 @@
-function solve end
-function solve! end
-
 function _show(io::IO, object)
     print(io, nameof(typeof(object)), ":")
     pad = get(io, :pad, "")

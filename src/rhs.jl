@@ -11,17 +11,17 @@ RHS(args...; kwargs...)
 ```
 
 # Arguments
-- `f :: Function` : right-hand side derivative.
-- `f! :: Function` : right-hand side derivative (in-place).
-- `Df :: Function` : jacobian of right-hand side derivative.
-- `Df! :: Function` : jacobian of right-hand side derivative (in-place).
+- `f       :: Function` : right-hand side derivative.
+- `f!      :: Function` : right-hand side derivative (in-place).
+- `Df      :: Function` : jacobian of right-hand side derivative.
+- `Df!     :: Function` : jacobian of right-hand side derivative (in-place).
 - `f!_or_f :: Function` : function (in-place or not) from which all other fields will be constructed.
 
 # Functions
 - [`show`](@ref) : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
-mutable struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: AbstractRightHandSideFunction
+struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: AbstractRightHandSideFunction
     f::f_T
     f!::f!_T
     Df::Df_T
