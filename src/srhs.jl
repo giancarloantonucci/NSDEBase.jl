@@ -10,7 +10,7 @@ SRHS(args...; kwargs...)
 ```
 
 # Arguments
-- `L   :: Union{Number, Matrix}` : linear part of right-hand side derivative.
+- `L :: Union{Number, Matrix}` : linear part of right-hand side derivative.
 - `rhs :: RightHandSideFunction` : nonlinear part of right-hand side derivative.
 """
 struct SplitRightHandSideFunction{L_T, rhs_T} <: AbstractRightHandSideFunction
@@ -18,4 +18,6 @@ struct SplitRightHandSideFunction{L_T, rhs_T} <: AbstractRightHandSideFunction
     rhs::rhs_T
 end
 
-@doc (@doc SplitRightHandSideFunction) SRHS(args...; kwargs...) = SplitRightHandSideFunction(args...; kwargs...)
+@doc (@doc SplitRightHandSideFunction) function SRHS(args...; kwargs...)
+    return SplitRightHandSideFunction(args...; kwargs...)
+end

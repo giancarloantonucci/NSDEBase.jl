@@ -1,4 +1,9 @@
-function _show(io::IO, object)
+"""
+    show(io::IO, object::AbstractNSDEObject)
+
+prints a full description of an [`AbstractNSDEObject`](@ref) and all its contents to a stream `io`.
+"""
+function Base.show(io::IO, object::AbstractNSDEObject)
     print(io, nameof(typeof(object)), ":")
     pad = get(io, :pad, "")
     lvl = get(io, :lvl, 1)
@@ -19,4 +24,9 @@ function _show(io::IO, object)
     end
 end
 
-_summary(io::IO, object) = print(io, nameof(typeof(object)))
+"""
+    summary(io::IO, problem::AbstractNSDEObject)
+
+prints a brief description of an [`AbstractNSDEObject`](@ref) and all its contents to a stream `io`.
+"""
+Base.summary(io::IO, object::AbstractNSDEObject) = print(io, nameof(typeof(object)))

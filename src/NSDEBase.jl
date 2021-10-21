@@ -1,13 +1,13 @@
 module NSDEBase
 
-############################################################################################
-#                                         EXPORTS                                          #
-############################################################################################
+################################################################################
+#                                   EXPORTS                                    #
+################################################################################
 
+export AbstractNSDEObject
 export AbstractNSDEProblem
 export AbstractNSDESolver
 export AbstractNSDESolution
-
 export AbstractInitialValueProblem
 export AbstractInitialValueSolver
 export AbstractInitialValueSolution
@@ -27,9 +27,9 @@ export Lorenz96
 
 export solve, solve!
 
-############################################################################################
-#                                           CORE                                           #
-############################################################################################
+################################################################################
+#                                     CORE                                     #
+################################################################################
 
 using ArrowMacros
 using LinearAlgebra
@@ -40,7 +40,7 @@ function solve end
 function solve! end
 
 include("abstract.jl")
-include("tmp.jl")
+include("object.jl")
 include("rhs.jl")
 include("srhs.jl")
 include("ivp.jl")
