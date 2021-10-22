@@ -11,3 +11,5 @@ NSDEBase is a [registered package](https://juliahub.com/ui/Search?q=NSDEBase&typ
 ```julia
 ]add NSDEBase
 ```
+
+Read the [documentation](https://giancarloantonucci.github.io/NSDEBase.jl/dev) for a complete overview of this package.
