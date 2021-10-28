@@ -26,8 +26,7 @@ Modules = [NSDEBase]
 Pages = [
   "ivp.jl",
   "rhs.jl",
-  "srhs.jl",
-]
+  "srhs.jl"]
 ```
 
 ### ODEs
@@ -41,7 +40,7 @@ Pages = ["odes.jl"]
 
 ```@autodocs
 Modules = [NSDEBase]
-Pages = ["object.jl"]
+Pages = ["show.jl"]
 ```
 
 ## Index
