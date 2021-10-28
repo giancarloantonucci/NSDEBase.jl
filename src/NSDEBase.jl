@@ -9,7 +9,7 @@ function solve end
 function solve! end
 
 include("abstract.jl")
-include("object.jl")
+include("show.jl")
 include("rhs.jl")
 include("srhs.jl")
 include("ivp.jl")
