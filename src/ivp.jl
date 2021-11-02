@@ -46,3 +46,16 @@ end
 @doc (@doc InitialValueProblem) function IVP(args...; kwargs...)
     return InitialValueProblem(args...; kwargs...)
 end
+
+#####
+##### Functions
+#####
+
+function subproblemof(problem::InitialValueProblem, u0, tspan)
+    return IVP(problem.rhs, u0, tspan)
+end
+
+function subproblemof(problem::InitialValueProblem, u0, t0, tN)
+    tspan = (t0, tN)
+    return subproblemof(problem, u0, tspan)
+end
