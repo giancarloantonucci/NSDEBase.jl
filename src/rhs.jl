@@ -9,8 +9,7 @@ RightHandSideFunction(f, f!, Df, Df!)
 RightHandSideFunction(f!_or_f)
 RHS(args...; kwargs...)
 ```
-
-## Arguments
+where
 - `f       :: Function` : right-hand side derivative.
 - `f!      :: Function` : right-hand side derivative (in-place).
 - `Df      :: Function` : jacobian of right-hand side derivative.

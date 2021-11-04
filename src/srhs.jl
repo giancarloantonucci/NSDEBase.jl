@@ -8,8 +8,7 @@ A composite type for the split right-hand side of an [`InitialValueProblem`](@re
 SplitRightHandSideFunction(L, rhs)
 SRHS(args...; kwargs...)
 ```
-
-# Arguments
+where
 - `L   :: Union{Number, AbstractMatrix{<:Number}}` : linear part of right-hand side derivative.
 - `rhs :: RightHandSideFunction`                   : nonlinear part of right-hand side derivative.
 """
