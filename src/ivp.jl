@@ -22,7 +22,7 @@ IVP(args...; kwargs...)
 - [`subproblemof`](@ref) : creates a subproblem.
 - [`summary`](@ref)      : shows name.
 """
-struct InitialValueProblem{rhs_T<:Union{Function, AbstractRightHandSideFunction}, u0_T<:Union{Number, AbstractVector{<:Number}}, tspan_T<:Tuple{Real, Real}} <: AbstractInitialValueProblem
+struct InitialValueProblem{rhs_T<:AbstractRightHandSideFunction, u0_T<:AbstractVector{<:Number}, tspan_T<:Tuple{Real, Real}} <: AbstractInitialValueProblem
     rhs::rhs_T
     u0::u0_T
     tspan::tspan_T
