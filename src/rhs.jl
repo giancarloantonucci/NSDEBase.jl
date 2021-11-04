@@ -1,7 +1,7 @@
 """
     RightHandSideFunction <: AbstractRightHandSideFunction
 
-A composite type for the right-hand side of an [`AbstractInitialValueProblem`](@ref).
+A composite type for the right-hand side of an [`InitialValueProblem`](@ref).
 
 # Constructors
 ```julia
@@ -11,17 +11,17 @@ RHS(args...; kwargs...)
 ```
 
 # Arguments
-- `f :: Function` : right-hand side derivative.
-- `f! :: Function` : right-hand side derivative (in-place).
-- `Df :: Function` : jacobian of right-hand side derivative.
-- `Df! :: Function` : jacobian of right-hand side derivative (in-place).
+- `f       :: Function` : right-hand side derivative.
+- `f!      :: Function` : right-hand side derivative (in-place).
+- `Df      :: Function` : jacobian of right-hand side derivative.
+- `Df!     :: Function` : jacobian of right-hand side derivative (in-place).
 - `f!_or_f :: Function` : function (in-place or not) from which all other fields will be constructed.
 
 # Functions
-- [`show`](@ref) : shows name and contents.
+- [`show`](@ref)    : shows name and contents.
 - [`summary`](@ref) : shows name.
 """
-struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: AbstractRightHandSideFunction
+struct RightHandSideFunction{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!_T<:Function} <: AbstractRightHandSideFunction
     f::f_T
     f!::f!_T
     Df::Df_T
@@ -88,6 +88,4 @@ function RightHandSideFunction(f!_or_f::Function; iscomplex=false)
     end
 end
 
-@doc (@doc RightHandSideFunction) function RHS(args...; kwargs...)
-    return RightHandSideFunction(args...; kwargs...)
-end
+@doc (@doc RightHandSideFunction) RHS(args...; kwargs...) = RightHandSideFunction(args...; kwargs...)

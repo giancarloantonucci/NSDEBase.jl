@@ -28,7 +28,7 @@ Logistic(u0, t0, tN; kwargs...) = Logistic(u0, (t0, tN); kwargs...)
 
 returns an [`InitialValueProblem`](@ref) for the simple pendulum problem.
 """
-function SimplePendulum(u0=[0.0, π / 2], tspan=(0.0, 2π); g=1.0, L=1.0)
+function SimplePendulum(u0=[0.0, π/2], tspan=(0.0, 2π); g=1.0, L=1.0)
     function f!(du, u, t)
         du[1] = u[2]
         du[2] = - g / L * sin(u[1])
@@ -39,12 +39,12 @@ end
 SimplePendulum(u0, t0, tN; kwargs...) = SimplePendulum(u0, (t0, tN); kwargs...)
 
 """
-    VanderPol(u0=[1.0; 0.0], tspan=(0.0, 1.0); μ=1.0) :: InitialValueProblem
+    VanderPol(u0=[1.0, 0.0], tspan=(0.0, 1.0); μ=1.0) :: InitialValueProblem
     VanderPol(u0, t0, tN; kwargs...) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Van der Pol equation (in first-order form).
 """
-function VanderPol(u0=[1.0; 0.0], tspan=(0.0, 1.0); μ=1.0)
+function VanderPol(u0=[1.0, 0.0], tspan=(0.0, 1.0); μ=1.0)
     function f!(du, u, t)
         du[1] = u[2]
         du[2] = μ * (1.0 - u[1]^2) * u[2] - u[1]
