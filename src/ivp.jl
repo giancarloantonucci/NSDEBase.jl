@@ -18,9 +18,7 @@ IVP(args...; kwargs...)
 - `tN    :: Real`                                           : final time.
 
 # Functions
-- [`show`](@ref)         : shows name and contents.
 - [`subproblemof`](@ref) : creates a subproblem.
-- [`summary`](@ref)      : shows name.
 """
 struct InitialValueProblem{rhs_T<:AbstractRightHandSideFunction, u0_T<:AbstractVector{<:Number}, tspan_T<:Tuple{Real, Real}} <: AbstractInitialValueProblem
     rhs::rhs_T

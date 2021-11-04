@@ -16,10 +16,6 @@ RHS(args...; kwargs...)
 - `Df      :: Function` : jacobian of right-hand side derivative.
 - `Df!     :: Function` : jacobian of right-hand side derivative (in-place).
 - `f!_or_f :: Function` : function (in-place or not) from which all other fields will be constructed.
-
-# Functions
-- [`show`](@ref)    : shows name and contents.
-- [`summary`](@ref) : shows name.
 """
 struct RightHandSideFunction{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!_T<:Function} <: AbstractRightHandSideFunction
     f::f_T
