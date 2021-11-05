@@ -9,12 +9,13 @@ InitialValueProblem(rhs, u0, tspan)
 InitialValueProblem(rhs, u0, t0, tN)
 IVP(args...; kwargs...)
 ```
-where
-- `rhs   :: Union{Function, AbstractRightHandSideFunction}` : right-hand side derivative.
-- `u0    :: Union{Number, AbstractVector{<:Number}}`        : initial condition.
-- `tspan :: Tuple{Real, Real}`                              : time domain.
-- `t0    :: Real`                                           : initial time.
-- `tN    :: Real`                                           : final time.
+
+## Arguments
+- `rhs :: Union{Function, AbstractRightHandSideFunction}` : right-hand side derivative.
+- `u0 :: Union{Number, AbstractVector{<:Number}}` : initial condition.
+- `tspan :: Tuple{Real, Real}` : time domain.
+- `t0 :: Real` : initial time.
+- `tN :: Real` : final time.
 
 # Functions
 - [`subproblemof`](@ref) : creates a subproblem.

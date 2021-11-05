@@ -4,7 +4,7 @@
 prints the full description of an `object` and its contents to a stream `io`.
 """
 function Base.show(io::IO, object::AbstractNSDEObject)
-    print(io, nameof(typeof(object)))
+    print(io, nameof(typeof(object)), ":")
     padding = get(io, :padding, "")
     thislevel = get(io, :thislevel, 1)
     names = propertynames(object)
@@ -20,10 +20,10 @@ function Base.show(io::IO, object::AbstractNSDEObject)
         field = getproperty(object, name)
         if field !== nothing
             print(io, "\n", padding, n < N ? "├── " : "└── ", string(name))
-            if thislevel < 3
+            if thislevel < 3 && !(field isa AbstractArray)
                 level += 1
                 tmpio = IOContext(io, :padding => string(padding, n < N ? "│   " : "    "), :thislevel => level)
-                print(tmpio, field isa AbstractNSDEObject ? " :: " : " = ")
+                print(tmpio, " = ")
                 show(tmpio, field)
             else
                 print(io, " :: ")
