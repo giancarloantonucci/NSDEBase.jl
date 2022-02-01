@@ -33,6 +33,7 @@ export SplitRightHandSideFunction, SRHS
 export Dahlquist
 export Logistic
 export SimplePendulum
+export DoublePendulum
 export VanderPol
 export Rössler
 export Lorenz
