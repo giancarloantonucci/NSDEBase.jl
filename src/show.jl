@@ -20,7 +20,7 @@ function Base.show(io::IO, object::AbstractNSDEObject)
         field = getproperty(object, name)
         if field !== nothing
             print(io, "\n", padding, n < N ? "├── " : "└── ", string(name))
-            if thislevel < 3 && !(field isa AbstractArray)
+            if thislevel < 5 && !(field isa AbstractArray)
                 level += 1
                 tmpio = IOContext(io, :padding => string(padding, n < N ? "│   " : "    "), :thislevel => level)
                 print(tmpio, " = ")
