@@ -6,7 +6,7 @@ A Julia package containing shared types and functions of [NSDE.jl](https://githu
 
 ## Installation
 
-NSDEBase is a [registered package](https://juliahub.com/ui/Search?q=NSDEBase&type=packages) compatible with Julia v1.0 and above. From the Julia REPL,
+NSDEBase.jl is a [registered package](https://juliahub.com/ui/Search?q=NSDEBase&type=packages) compatible with Julia v1.0 and above. From the Julia REPL,
 
 ```julia
 ]add NSDEBase
