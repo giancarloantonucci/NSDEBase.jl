@@ -17,22 +17,18 @@ RHS(args...; kwargs...)
 - `Df! :: Function` : jacobian of right-hand side derivative (in-place).
 - `f!_or_f :: Function` : function (in-place or not) from which all other fields will be constructed.
 """
-struct RightHandSideFunction{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!_T<:Function} <: AbstractRightHandSideFunction
+struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: AbstractRightHandSideFunction
     f::f_T
     f!::f!_T
     Df::Df_T
     Df!::Df!_T
 end
 
-# Check if f!_or_f is either like f!(du, u, t) or like f(u, t)
-has_n_args(f, n) = hasmethod(f, NTuple{n, Any})
-
 function RightHandSideFunction(f!_or_f::Function; iscomplex=false)
+    # Jacobian using Wirtinger derivatives:
     if iscomplex
-        # Jacobian using Wirtinger derivatives:
-        # https://math.stackexchange.com/questions/2945446/understanding-the-chain-rule-in-the-wirtinger-calculus
-        # possible alternative: use reinterpret
-        if has_n_args(f!_or_f, 3)
+        # Check if f!_or_f is f!(du, u, t)
+        if hasmethod(f!_or_f, NTuple{3, Any})
             f! = f!_or_f
             f = (u, t) -> f!_or_f(similar(u), u, t)
             Df = function (u, t)
@@ -49,7 +45,8 @@ function RightHandSideFunction(f!_or_f::Function; iscomplex=false)
                 return J
             end
             return RightHandSideFunction(f, f!, Df, Df!)
-        elseif has_n_args(f!_or_f, 2)
+        # Check if f!_or_f is f(u, t)
+        elseif hasmethod(f!_or_f, NTuple{2, Any})
             f = f!_or_f
             f! = (du, u, t) -> du .= f!_or_f(u, t)
             Df = function (u, t)
@@ -68,13 +65,15 @@ function RightHandSideFunction(f!_or_f::Function; iscomplex=false)
             return RightHandSideFunction(f, f!, Df, Df!)
         end
     else
-        if has_n_args(f!_or_f, 3)
+        # Check if f!_or_f is f!(du, u, t)
+        if hasmethod(f!_or_f, NTuple{3, Any})
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
             Df = (u, t) -> ForwardDiff.jacobian((du, u) -> f!(du, u, t), similar(u), u)
             Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, (du, u) -> f!(du, u, t), du, u)
             return RightHandSideFunction(f, f!, Df, Df!)
-        elseif has_n_args(f!_or_f, 2)
+        # Check if f!_or_f is f(u, t)
+        elseif hasmethod(f!_or_f, NTuple{2, Any})
             f = f!_or_f
             f! = (du, u, t) -> du .= f(u, t)
             Df = (u, t) -> ForwardDiff.jacobian(u -> f(u, t), u)

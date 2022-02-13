@@ -13,7 +13,7 @@ SRHS(args...; kwargs...)
 - `L :: Union{Number, AbstractMatrix{<:Number}}` : linear part of right-hand side derivative.
 - `rhs :: RightHandSideFunction` : nonlinear part of right-hand side derivative.
 """
-struct SplitRightHandSideFunction{L_T<:Union{Number, AbstractMatrix{<:Number}}, rhs_T<:RightHandSideFunction} <: AbstractRightHandSideFunction
+struct SplitRightHandSideFunction{L_T, rhs_T} <: AbstractRightHandSideFunction
     L::L_T
     rhs::rhs_T
 end

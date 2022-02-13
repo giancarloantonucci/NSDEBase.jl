@@ -5,7 +5,7 @@
 returns an [`InitialValueProblem`](@ref) for the Dahlquist equation.
 """
 function Dahlquist(u0=0.5, tspan=(0.0, 1.0); λ=1.0)
-    f!(du, u, t) = @. du = λ * u
+    f!(du, u, t) = du .= λ * u
     return IVP(f!, u0, tspan)
 end
 Dahlquist(u0, t0, tN; kwargs...) = Dahlquist(u0, (t0, tN); kwargs...)

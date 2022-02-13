@@ -1,4 +1,3 @@
-# phaseplot
 mutable struct _PhasePlot{object_T}
     object::object_T
 end
@@ -7,7 +6,6 @@ end
     return _PhasePlot(h.args[1])
 end
 
-# convergence
 mutable struct _Convergence{object_T}
     object::object_T
 end
