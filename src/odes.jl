@@ -1,34 +1,34 @@
 """
-    Dahlquist(u0=0.5, tspan=(0.0, 1.0); λ=1.0) :: InitialValueProblem
+    Dahlquist(u0=0.5, tspan=(0, 1); λ=1) :: InitialValueProblem
     Dahlquist(u0, t0, tN; kwargs...) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Dahlquist equation.
 """
-function Dahlquist(u0=0.5, tspan=(0.0, 1.0); λ=1.0)
+function Dahlquist(u0=0.5, tspan=(0, 1); λ=1)
     f!(du, u, t) = du .= λ * u
     return IVP(f!, u0, tspan)
 end
 Dahlquist(u0, t0, tN; kwargs...) = Dahlquist(u0, (t0, tN); kwargs...)
 
 """
-    Logistic(u0=0.5, tspan=(0.0, 1.0); λ=1.0) :: InitialValueProblem
+    Logistic(u0=0.5, tspan=(0, 1); λ=1) :: InitialValueProblem
     Logistic(u0, t0, tN; kwargs...) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Logistic equation.
 """
-function Logistic(u0=0.5, tspan=(0.0, 1.0); λ=1.0)
-    f!(du, u, t) = @. du = λ * u * (1.0 - u)
+function Logistic(u0=0.5, tspan=(0, 1); λ=1)
+    f!(du, u, t) = @. du = λ * u * (1 - u)
     return IVP(f!, u0, tspan)
 end
 Logistic(u0, t0, tN; kwargs...) = Logistic(u0, (t0, tN); kwargs...)
 
 """
-    SimplePendulum(u0=[0.0, π/2], tspan=(0.0, 2π/3 * √9.81)) :: InitialValueProblem
+    SimplePendulum(u0=[0.0, π/2], tspan=(0, 2π/3 * √9.81)) :: InitialValueProblem
     SimplePendulum(u0, t0, tN; kwargs...) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the simple pendulum problem.
 """
-function SimplePendulum(u0=[π/4; 0.0], tspan=(0.0, 2π/3 * √9.81))
+function SimplePendulum(u0=[π/4, 0], tspan=(0, 2π/3 * √9.81))
     function f!(du, u, t)
         du[1] = u[2]
         du[2] = - sin(u[1])
@@ -39,12 +39,12 @@ end
 SimplePendulum(u0, t0, tN; kwargs...) = SimplePendulum(u0, (t0, tN); kwargs...)
 
 """
-    DoublePendulum(u0=[π/4; π/4; 0.0; 0.0], tspan=(0.0, 1.0); μ=1.0, λ=1.0) :: InitialValueProblem
+    DoublePendulum(u0=[π/4, π/4, 0, 0], tspan=(0, 1); μ=1, λ=1) :: InitialValueProblem
     DoublePendulum(u0, t0, tN; kwargs...) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the double pendulum problem.
 """
-function DoublePendulum(u0=[π/4; π/4; 0.0; 0.0], tspan=(0.0, 1.0); μ=1.0, λ=1.0)
+function DoublePendulum(u0=[π/4, π/4, 0, 0], tspan=(0, 1); μ=1, λ=1)
     function M(θ₁, θ₂)
       M₁₁ = 1 + μ
       M₁₂ = M₂₁ = μ * λ * cos(θ₁ - θ₂)
@@ -69,12 +69,12 @@ end
 DoublePendulum(u0, t0, tN; kwargs...) = DoublePendulum(u0, (t0, tN); kwargs...)
 
 """
-    VanderPol(u0=[1.0, 0.0], tspan=(0.0, 1.0); μ=1.0) :: InitialValueProblem
+    VanderPol(u0=[1.0, 0.0], tspan=(0, 1); μ=1) :: InitialValueProblem
     VanderPol(u0, t0, tN; kwargs...) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Van der Pol equation (in first-order form).
 """
-function VanderPol(u0=[1.0, 0.0], tspan=(0.0, 1.0); μ=1.0)
+function VanderPol(u0=[1.0, 0.0], tspan=(0, 1); μ=1)
     function f!(du, u, t)
         du[1] = u[2]
         du[2] = μ * (1.0 - u[1]^2) * u[2] - u[1]
@@ -85,12 +85,12 @@ end
 VanderPol(u0, t0, tN; kwargs...) = VanderPol(u0, (t0, tN); kwargs...)
 
 """
-    Rössler(u0=[2.0, 0.0, 0.0], tspan=(0.0, 1.0); a=0.2, b=0.2, c=5.7) :: InitialValueProblem
+    Rössler(u0=[2.0, 0.0, 0.0], tspan=(0, 1); a=0.2, b=0.2, c=5.7) :: InitialValueProblem
     Rössler(u0, t0, tN; kwargs...) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Rössler equations.
 """
-function Rössler(u0=[2.0, 0.0, 0.0], tspan=(0.0, 1.0); a=0.2, b=0.2, c=5.7)
+function Rössler(u0=[2.0, 0.0, 0.0], tspan=(0, 1); a=0.2, b=0.2, c=5.7)
     function f!(du, u, t)
         du[1] = - u[2] - u[3]
         du[2] = u[1] + a * u[2]
@@ -102,12 +102,12 @@ end
 Rössler(u0, t0, tN; kwargs...) = Rössler(u0, (t0, tN); kwargs...)
 
 """
-    Lorenz(u0=[2.0, 3.0, -14.0], tspan=(0.0, 1.0); σ=10.0, β=8/3, ρ=28.0) :: InitialValueProblem
+    Lorenz(u0=[2, 3, -14], tspan=(0, 1); σ=10, β=8/3, ρ=28) :: InitialValueProblem
     Lorenz(u0, t0, tN; kwargs...) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Lorenz equations.
 """
-function Lorenz(u0=[2.0, 3.0, -14.0], tspan=(0.0, 1.0); σ=10.0, β=8/3, ρ=28.0)
+function Lorenz(u0=[2, 3, -14], tspan=(0, 1); σ=10, β=8/3, ρ=28)
     function f!(du, u, t)
         du[1] = σ * (u[2] - u[1])
         du[2] = u[1] * (ρ - u[3]) - u[2]
@@ -119,12 +119,12 @@ end
 Lorenz(u0, t0, tN; kwargs...) = Lorenz(u0, (t0, tN); kwargs...)
 
 """
-    Lorenz96(u0=[1.01; ones(39)], tspan=(0.0, 1.0); F=8) :: InitialValueProblem
+    Lorenz96(u0=[1.01; ones(39)], tspan=(0, 1); F=8) :: InitialValueProblem
     Lorenz96(u0, t0, tN; kwargs...) :: InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Lorenz-96 equations.
 """
-function Lorenz96(u0=[1.01; ones(39)], tspan=(0.0, 1.0); F=8)
+function Lorenz96(u0=[1.01; ones(39)], tspan=(0, 1); F=8)
     N = length(u0)
     if N < 4
         error("Lorenz96 requires N ≥ 4.")

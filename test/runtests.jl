@@ -9,8 +9,11 @@ using Test
     @test problem isa InitialValueProblem
     @test problem.rhs isa RightHandSideFunction
 
+    u0 = [1]
+    t0 = 0
+    tN = 1
     f!(du, u, t) = @. du = u * (1 - u)
-    problem = IVP(f!, u0, tspan)
+    problem = IVP(f!, u0, t0, tN)
     @test problem isa InitialValueProblem
     @test problem.rhs isa RightHandSideFunction
     
@@ -19,14 +22,14 @@ using Test
 end
 
 @testset "ODEs" begin
-    @test Dahlquist() isa InitialValueProblem
-    @test Logistic() isa InitialValueProblem
-    @test SimplePendulum() isa InitialValueProblem
-    @test DoublePendulum() isa InitialValueProblem
-    @test VanderPol() isa InitialValueProblem
-    @test Rössler() isa InitialValueProblem
-    @test Lorenz() isa InitialValueProblem
-    @test Lorenz96() isa InitialValueProblem
+    @test Dahlquist(0.5, 0, 1) isa InitialValueProblem
+    @test Logistic(0.5, 0, 1) isa InitialValueProblem
+    @test SimplePendulum([π/4, 0], 0, 1) isa InitialValueProblem
+    @test DoublePendulum([π/4, π/4, 0, 0], 0, 1) isa InitialValueProblem
+    @test VanderPol([1, 0], 0, 1) isa InitialValueProblem
+    @test Rössler([2, 0, 0], 0, 1) isa InitialValueProblem
+    @test Lorenz([2, 3, -14], 0, 1) isa InitialValueProblem
+    @test Lorenz96(ones(4), 0, 1) isa InitialValueProblem
 end
 
 @testset "Functions" begin
