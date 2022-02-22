@@ -6,10 +6,8 @@ using ForwardDiff
 using FiniteDifferences
 using RecipesBase
 
-function solve end
-function solve! end
-
 include("abstract.jl")
+include("utils.jl")
 include("show.jl")
 include("rhs.jl")
 include("srhs.jl")
@@ -17,7 +15,7 @@ include("ivp.jl")
 include("odes.jl")
 include("plotrecipes.jl")
 
-export AbstractNSDEObject
+export AbstractNSDEType
 export AbstractNSDEProblem
 export AbstractNSDESolver
 export AbstractNSDESolution
@@ -26,7 +24,7 @@ export AbstractInitialValueSolver
 export AbstractInitialValueSolution
 export AbstractRightHandSideFunction
 
-export InitialValueProblem, IVP
+export InitialValueProblem, IVP, makesub
 export RightHandSideFunction, RHS
 export SplitRightHandSideFunction, SRHS
 
@@ -40,6 +38,5 @@ export Lorenz
 export Lorenz96
 
 export solve, solve!
-export subproblemof
 
 end

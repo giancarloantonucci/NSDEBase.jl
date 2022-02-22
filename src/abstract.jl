@@ -1,14 +1,14 @@
-"An abstract type for objects in [NSDE.jl](https://github.com/antonuccig/NSDE.jl)."
-abstract type AbstractNSDEObject end
+"An abstract type for all the types of [NSDE.jl](https://github.com/giancarloantonucci/NSDE.jl)."
+abstract type AbstractNSDEType end
 
-"An abstract type for problems in [NSDE.jl](https://github.com/antonuccig/NSDE.jl)."
-abstract type AbstractNSDEProblem <: AbstractNSDEObject end
+"An abstract type for all the problems of [NSDE.jl](https://github.com/giancarloantonucci/NSDE.jl)."
+abstract type AbstractNSDEProblem <: AbstractNSDEType end
 
-"An abstract type for solvers of [`AbstractNSDEProblem`](@ref)s."
-abstract type AbstractNSDESolver <: AbstractNSDEObject end
+"An abstract type for all the solvers of [`AbstractNSDEProblem`](@ref)s."
+abstract type AbstractNSDESolver <: AbstractNSDEType end
 
 "An abstract type for the solution of an [`AbstractNSDEProblem`](@ref) obtained with an [`AbstractNSDESolver`](@ref)."
-abstract type AbstractNSDESolution <: AbstractNSDEObject end
+abstract type AbstractNSDESolution <: AbstractNSDEType end
 
 "An abstract type for initial value problems."
 abstract type AbstractInitialValueProblem <: AbstractNSDEProblem end
@@ -20,4 +20,4 @@ abstract type AbstractInitialValueSolver <: AbstractNSDESolver end
 abstract type AbstractInitialValueSolution <: AbstractNSDESolution end
 
 "An abstract type for the right-hand side of an [`AbstractInitialValueProblem`](@ref)."
-abstract type AbstractRightHandSideFunction <: AbstractNSDEObject end
+abstract type AbstractRightHandSideFunction <: AbstractNSDEType end

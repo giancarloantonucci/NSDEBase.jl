@@ -10,7 +10,7 @@ SRHS(args...; kwargs...)
 ```
 
 ## Arguments
-- `L :: Union{Number, AbstractMatrix{<:Number}}` : linear part of right-hand side derivative.
+- `L :: Union{ℂ, AbstractMatrix{<:ℂ}}` : linear part of right-hand side derivative.
 - `rhs :: RightHandSideFunction` : nonlinear part of right-hand side derivative.
 """
 struct SplitRightHandSideFunction{L_T, rhs_T} <: AbstractRightHandSideFunction

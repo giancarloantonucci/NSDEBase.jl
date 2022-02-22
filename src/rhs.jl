@@ -16,6 +16,9 @@ RHS(args...; kwargs...)
 - `Df :: Function` : jacobian of right-hand side derivative.
 - `Df! :: Function` : jacobian of right-hand side derivative (in-place).
 - `f!_or_f :: Function` : function (in-place or not) from which all other fields will be constructed.
+
+# Functions
+- [`copy`](@ref) : returns a copy.
 """
 struct RightHandSideFunction{f_T, f!_T, Df_T, Df!_T} <: AbstractRightHandSideFunction
     f::f_T
@@ -68,9 +71,9 @@ function RightHandSideFunction(f!_or_f::Function; iscomplex=false)
         # Check if f!_or_f is f!(du, u, t)
         if hasmethod(f!_or_f, NTuple{3, Any})
             f! = f!_or_f
-            f = (u, t) -> f!(similar(u), u, t)
-            Df = (u, t) -> ForwardDiff.jacobian((du, u) -> f!(du, u, t), similar(u), u)
-            Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, (du, u) -> f!(du, u, t), du, u)
+            f(u, t) = f!(similar(u), u, t)
+            Df(u, t) = ForwardDiff.jacobian((du, u) -> f!(du, u, t), similar(u), u)
+            Df!(J, du, u, t) = ForwardDiff.jacobian!(J, (du, u) -> f!(du, u, t), du, u)
             return RightHandSideFunction(f, f!, Df, Df!)
         # Check if f!_or_f is f(u, t)
         elseif hasmethod(f!_or_f, NTuple{2, Any})
@@ -84,3 +87,17 @@ function RightHandSideFunction(f!_or_f::Function; iscomplex=false)
 end
 
 @doc (@doc RightHandSideFunction) RHS(args...; kwargs...) = RightHandSideFunction(args...; kwargs...)
+
+#####
+##### Functions
+#####
+
+"""
+    copy(problem::InitialValueProblem)
+    
+returns a copy of `rhs`.
+"""
+function Base.copy(rhs::RightHandSideFunction)
+    @↓ f, f!, Df, Df! = rhs
+    return RHS(f, f!, Df, Df!)
+end
