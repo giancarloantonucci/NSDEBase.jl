@@ -1,9 +1,9 @@
 """
-    show(io::IO, object::AbstractNSDEType)
+    show(io::IO, object::AbstractShowable)
 
 prints the full description of an `object` and its contents to a stream `io`.
 """
-function Base.show(io::IO, object::AbstractNSDEType)
+function Base.show(io::IO, object::AbstractShowable)
     print(io, nameof(typeof(object)), ":")
     padding = get(io, :padding, "")
     thislevel = get(io, :thislevel, 1)
@@ -34,8 +34,8 @@ function Base.show(io::IO, object::AbstractNSDEType)
 end
 
 """
-    summary(io::IO, problem::AbstractNSDEType)
+    summary(io::IO, object::AbstractShowable)
 
 prints the short description of an `object` to a stream `io`.
 """
-Base.summary(io::IO, object::AbstractNSDEType) = print(io, nameof(typeof(object)))
+Base.summary(io::IO, object::AbstractShowable) = print(io, nameof(typeof(object)))

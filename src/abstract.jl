@@ -1,23 +1,15 @@
-"An abstract type for all the types of [NSDE.jl](https://github.com/giancarloantonucci/NSDE.jl)."
-abstract type AbstractNSDEType end
+abstract type AbstractShowable end
 
-"An abstract type for all the problems of [NSDE.jl](https://github.com/giancarloantonucci/NSDE.jl)."
-abstract type AbstractNSDEProblem <: AbstractNSDEType end
+abstract type AbstractProblem <: AbstractShowable end
+abstract type AbstractSolver <: AbstractShowable end
+abstract type AbstractSolution <: AbstractShowable end
+abstract type AbstractParameters <: AbstractShowable end
+abstract type AbstractCache <: AbstractShowable end
 
-"An abstract type for all the solvers of [`AbstractNSDEProblem`](@ref)s."
-abstract type AbstractNSDESolver <: AbstractNSDEType end
+abstract type AbstractInitialValueProblem <: AbstractProblem end
+abstract type AbstractInitialValueSolver <: AbstractSolver end
+abstract type AbstractInitialValueSolution <: AbstractSolution end
+abstract type AbstractInitialValueParameters <: AbstractParameters end
+abstract type AbstractInitialValueCache <: AbstractCache end
 
-"An abstract type for the solution of an [`AbstractNSDEProblem`](@ref) obtained with an [`AbstractNSDESolver`](@ref)."
-abstract type AbstractNSDESolution <: AbstractNSDEType end
-
-"An abstract type for initial value problems."
-abstract type AbstractInitialValueProblem <: AbstractNSDEProblem end
-
-"An abstract type for solvers of [`AbstractInitialValueProblem`](@ref)s."
-abstract type AbstractInitialValueSolver <: AbstractNSDESolver end
-
-"An abstract type for the solution of an [`AbstractInitialValueProblem`](@ref) obtained with an [`AbstractInitialValueSolver`](@ref)."
-abstract type AbstractInitialValueSolution <: AbstractNSDESolution end
-
-"An abstract type for the right-hand side of an [`AbstractInitialValueProblem`](@ref)."
-abstract type AbstractRightHandSideFunction <: AbstractNSDEType end
+abstract type AbstractRightHandSide <: AbstractInitialValueParameters end

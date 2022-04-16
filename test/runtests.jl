@@ -15,7 +15,7 @@ using Test
     u0 = t0 = tN = 0.0
     problem = IVP(f!, u0, t0, tN)
     @test problem isa InitialValueProblem
-    @test problem.rhs isa RightHandSideFunction
+    @test problem.rhs isa NonlinearRightHandSide
     @test problem.u0 isa AbstractVector{<:AbstractFloat}
     @test problem.tspan isa Tuple{AbstractFloat, AbstractFloat}
     
@@ -37,7 +37,7 @@ end
     u0 = [0.0]
     tspan = (0.0, 1.0)
     problem = IVP(f, u0, tspan)
-    @test problem.rhs isa RightHandSideFunction
+    @test problem.rhs isa NonlinearRightHandSide
     @test problem.rhs.f isa Function
     @test problem.rhs.f! isa Function
     @test problem.rhs.Df isa Function

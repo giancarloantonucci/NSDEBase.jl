@@ -1,6 +1,6 @@
 # NSDEBase.jl
 
-This is the documentation of [NSDEBase.jl](https://github.com/giancarloantonucci/NSDEBase.jl), a Julia package containing shared types and functions of [NSDE.jl](https://github.com/giancarloantonucci/NSDE.jl) and its sub-packages.
+This is the documentation of [NSDEBase.jl](https://github.com/giancarloantonucci/NSDEBase.jl), a Julia package containing common types and utility functions shared by [NSDE.jl](https://github.com/giancarloantonucci/NSDE.jl) and its subpackages.
 
 ## Manual
 
@@ -10,19 +10,19 @@ Depth = 3
 
 ## API
 
-All exported types and functions are considered part of the public API and thus documented in this manual.
+All exported types and functions are considered part of the public API, and thus documented in this manual.
 
 ### Abstract types
 
 ```@docs
-AbstractNSDEObject
+AbstractNSDEType
 AbstractNSDEProblem
 AbstractNSDESolver
 AbstractNSDESolution
 AbstractInitialValueProblem
 AbstractInitialValueSolver
 AbstractInitialValueSolution
-AbstractRightHandSideFunction
+AbstractRightHandSide
 ```
 
 ### Composite types
@@ -30,8 +30,8 @@ AbstractRightHandSideFunction
 ```@docs
 InitialValueProblem
 subproblemof
-RightHandSideFunction
-SplitRightHandSideFunction
+RightHandSide
+SplitRightHandSide
 ```
 
 ### ODEs

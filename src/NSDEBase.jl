@@ -9,34 +9,47 @@ using RecipesBase
 include("abstract.jl")
 include("utils.jl")
 include("show.jl")
-include("rhs.jl")
-include("srhs.jl")
+include("rhs/nonlinear.jl")
+include("rhs/linear.jl")
+include("rhs/split.jl")
 include("ivp.jl")
 include("odes.jl")
-include("plotrecipes.jl")
+include("plot.jl")
 
-export AbstractNSDEType
-export AbstractNSDEProblem
-export AbstractNSDESolver
-export AbstractNSDESolution
+function solve end
+function solve! end
+
+export AbstractShowable
+
+export AbstractProblem
+export AbstractSolver
+export AbstractSolution
+export AbstractParameters
+export AbstractCache
+
 export AbstractInitialValueProblem
 export AbstractInitialValueSolver
 export AbstractInitialValueSolution
-export AbstractRightHandSideFunction
+export AbstractInitialValueParameters
+export AbstractInitialValueCache
+export AbstractRightHandSide
 
-export InitialValueProblem, IVP, makesub
-export RightHandSideFunction, RHS
-export SplitRightHandSideFunction, SRHS
+export InitialValueProblem, IVP
+export NonlinearRightHandSide, NRHS, RHS
+export LinearRightHandSide, LRHS
+export SplitRightHandSide, SRHS
 
 export Dahlquist
 export Logistic
 export SimplePendulum
 export DoublePendulum
-export VanderPol
+export VanDerPol
 export Rössler
 export Lorenz
 export Lorenz96
 
+export zero!
+export subproblemof
 export solve, solve!
 
 end

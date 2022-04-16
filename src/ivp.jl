@@ -1,7 +1,7 @@
 """
     InitialValueProblem <: AbstractInitialValueProblem
 
-A composite type for an [`AbstractInitialValueProblem`](@ref).
+A composite type for an initial-value problem.
 
 # Constructors
 ```julia
@@ -10,26 +10,23 @@ InitialValueProblem(rhs, u0, t0, tN)
 IVP(args...; kwargs...)
 ```
 
-## Arguments
-- `rhs :: Union{Function, AbstractRightHandSideFunction}` : right-hand side derivative.
-- `u0 :: Union{Number, AbstractVector{<:Number}}` : initial condition.
-- `tspan :: Tuple{Real, Real}` : time domain.
-- `t0 :: Real` : initial time.
-- `tN :: Real` : final time.
+# Arguments
+- `rhs :: Union{AbstractRightHandSide, Function, AbstractMatrix{ℂ}, ℂ} where ℂ<:Number`
+- `u0 :: Union{AbstractVector{ℂ}, ℂ} where ℂ<:Number`
+- `tspan :: Tuple{ℝ, ℝ} where ℝ<:Real`
 
 # Functions
-- [`copy`](@ref) : returns a copy.
-- [`makesub`](@ref) : creates a subproblem.
+- [`subproblemof`](@ref) : creates a subproblem.
 """
-struct InitialValueProblem{rhs_T, u0_T, tspan_T} <: AbstractInitialValueProblem
+struct InitialValueProblem{rhs_T<:AbstractRightHandSide, u0_T<:(AbstractVector{ℂ} where ℂ<:Number), tspan_T<:(Tuple{ℝ, ℝ} where ℝ<:Real)} <: AbstractInitialValueProblem
     rhs::rhs_T
     u0::u0_T
     tspan::tspan_T
 end
-
-InitialValueProblem(f::Function, u0::AbstractVector, tspan) = InitialValueProblem(RHS(f), u0, tspan)
-InitialValueProblem(rhs, u0::Number, tspan) = InitialValueProblem(rhs, [u0], tspan)
-InitialValueProblem(rhs, u0, t0, tN) = InitialValueProblem(rhs, u0, (t0, tN))
+InitialValueProblem(L::Union{AbstractMatrix{ℂ}, ℂ}, u0::AbstractVector{ℂ}, tspan::Tuple{ℝ, ℝ}) where {ℂ<:Number, ℝ<:Real} = InitialValueProblem(LRHS(L), u0, tspan)
+InitialValueProblem(f::Function, u0::AbstractVector{ℂ}, tspan::Tuple{ℝ, ℝ}) where {ℂ<:Number, ℝ<:Real} = InitialValueProblem(RHS(f), u0, tspan)
+InitialValueProblem(rhs::Union{AbstractRightHandSide, Function, AbstractMatrix{ℂ}, ℂ}, u0::ℂ, tspan::Tuple{ℝ, ℝ}) where {ℂ<:Number, ℝ<:Real} = InitialValueProblem(rhs, [u0], tspan)
+InitialValueProblem(rhs::Union{AbstractRightHandSide, Function, AbstractMatrix{ℂ}, ℂ}, u0::Union{AbstractVector{ℂ}, ℂ}, t0::ℝ, tN::ℝ) where {ℂ<:Number, ℝ<:Real} = InitialValueProblem(rhs, u0, (t0, tN))
 @doc (@doc InitialValueProblem) IVP(args...; kwargs...) = InitialValueProblem(args...; kwargs...)
 
 #####
@@ -37,23 +34,13 @@ InitialValueProblem(rhs, u0, t0, tN) = InitialValueProblem(rhs, u0, (t0, tN))
 #####
 
 """
-    copy(problem::InitialValueProblem)
-    
-returns a copy of `problem`.
-"""
-function Base.copy(problem::InitialValueProblem)
-    @↓ rhs, u0, tspan = problem
-    return IVP(rhs, u0, tspan)
-end
+    subproblemof(problem, u0, tspan) :: InitialValueProblem
+    subproblemof(problem, u0, t0, tN) :: InitialValueProblem
 
+returns a subproblem of `problem`, i.e. a copy with same `rhs` but different `u0` and `tspan`.
 """
-    makesub(problem::InitialValueProblem, u0, tspan) :: InitialValueProblem
-    makesub(problem, u0, t0, tN) :: InitialValueProblem
-
-returns a subproblem of `problem`, that is a copy with different `u0` and `tspan`.
-"""
-function makesub(problem::InitialValueProblem, u0, tspan)
+function subproblemof(problem::InitialValueProblem, u0::Union{ℂ, AbstractVector{ℂ}}, tspan::Tuple{ℝ, ℝ}) where {ℂ<:Number, ℝ<:Real}
     @↓ rhs = problem
     return IVP(rhs, u0, tspan)
 end
-makesub(problem, u0, t0, tN) = makesub(problem, u0, (t0, tN))
+subproblemof(problem::InitialValueProblem, u0::Union{ℂ, AbstractVector{ℂ}}, t0::ℝ, tN::ℝ) where {ℂ<:Number, ℝ<:Real} = subproblemof(problem, u0, (t0, tN))
