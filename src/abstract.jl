@@ -1,10 +1,10 @@
-abstract type AbstractShowable end
+abstract type AbstractObject end
 
-abstract type AbstractProblem <: AbstractShowable end
-abstract type AbstractSolver <: AbstractShowable end
-abstract type AbstractSolution <: AbstractShowable end
-abstract type AbstractParameters <: AbstractShowable end
-abstract type AbstractCache <: AbstractShowable end
+abstract type AbstractProblem <: AbstractObject end
+abstract type AbstractSolver <: AbstractObject end
+abstract type AbstractSolution <: AbstractObject end
+abstract type AbstractParameters <: AbstractObject end
+abstract type AbstractCache <: AbstractObject end
 
 abstract type AbstractInitialValueProblem <: AbstractProblem end
 abstract type AbstractInitialValueSolver <: AbstractSolver end

@@ -10,8 +10,8 @@ SRHS(args...; kwargs...)
 ```
 
 # Arguments
-- `stiff :: Union{NonlinearRightHandSide, LinearRightHandSide, Function, AbstractMatrix{ℂ}, ℂ} where ℂ<:Number`
-- `nonstiff :: Union{NonlinearRightHandSide, Function}`
+- `stiff :: Union{NonlinearRightHandSide, LinearRightHandSide, Function, AbstractMatrix{ℂ}, ℂ} where ℂ<:Number` : $f_s$.
+- `nonstiff :: Union{NonlinearRightHandSide, Function}` : $f_{ns}$.
 """
 struct SplitRightHandSide{stiff_T<:Union{LinearRightHandSide, NonlinearRightHandSide}, nonstiff_T<:NonlinearRightHandSide} <: AbstractRightHandSide
     stiff::stiff_T
@@ -23,9 +23,7 @@ SplitRightHandSide(L::Union{AbstractMatrix{ℂ}, ℂ}, nonstiff::NonlinearRightH
 SplitRightHandSide(stiff::Union{NonlinearRightHandSide, LinearRightHandSide, Function, AbstractMatrix{ℂ}, ℂ}, fₙₛ::Function) where ℂ<:Number = SplitRightHandSide(stiff, NRHS(fₙₛ))
 @doc (@doc SplitRightHandSide) SRHS(args...; kwargs...) = SplitRightHandSide(args...; kwargs...)
 
-#####
-##### Methods
-#####
+#----------------------------------- METHODS -----------------------------------
 
 function (rhs::SplitRightHandSide)(u, t)
     @↓ stiff, nonstiff = rhs

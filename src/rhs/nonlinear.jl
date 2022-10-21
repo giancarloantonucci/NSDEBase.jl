@@ -7,9 +7,21 @@ A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in 
 ```julia
 NonlinearRightHandSide(f, f!, Df, Df!)
 NonlinearRightHandSide(f!_or_f, iscomplex=false)
-NRHS(args...; kwargs...)
 RHS(args...; kwargs...)
 ```
+
+# Arguments
+`f :: Function` : $f$.
+`f! :: Function` : $f$ (in-place).
+`Df :: Function` : Jacobian of $f$.
+`Df! :: Function` : Jacobian of $f$ (in-place).
+
+# Methods
+
+    (rhs::NonlinearRightHandSide)(u, t)
+    (rhs::NonlinearRightHandSide)(du, u, t)
+
+computes the derivative `du` from the solution `u` and time `t`.
 """
 struct NonlinearRightHandSide{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!_T<:Function} <: AbstractRightHandSide
     f::f_T
@@ -17,76 +29,76 @@ struct NonlinearRightHandSide{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!
     Df::Df_T
     Df!::Df!_T
 end
+
 function NonlinearRightHandSide(f!_or_f::Function; iscomplex::Bool=false)
     if iscomplex
-        # Jacobian via Wirtinger derivative
-        # f!_or_f ?= f!(du, u, t)
-        if hasmethod(f!_or_f, NTuple{3, Any})
+        # Jacobian via Wirtinger derivatives
+        if hasmethod(f!_or_f, NTuple{3, Any}) # f!_or_f like f!(du, u, t)?
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
             Df = function (u, t)
-                J_ = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+                J = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
                 n = length(u)
-                P̂ = 0.5 * [1.0 -1.0im; 1.0 1.0im]
+                P = 0.5 * [1.0 -1.0im; 1.0 1.0im]
                 Iₙ = Matrix(I, n, n)
-                P = kron(Iₙ, P̂)
-                J = ((P * J_) / P)[1:2:(2 * n - 1), 1:2:(2 * n - 1)]
-                return J
+                PP = kron(Iₙ, P)
+                JJ = ((PP * J) / PP)[1:2:(2n-1), 1:2:(2n-1)]
+                return JJ
             end
             Df! = function (J, du, u, t)
                 J .= Df(u, t)
                 return J
             end
             return NonlinearRightHandSide(f, f!, Df, Df!)
-        # f!_or_f ?= f(u, t)
-        elseif hasmethod(f!_or_f, NTuple{2, Any})
+        elseif hasmethod(f!_or_f, NTuple{2, Any}) # f!_or_f like f(u, t)?
             f = f!_or_f
             f! = (du, u, t) -> du .= f(u, t)
             Df = function (u, t)
-                J_ = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+                J = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
                 n = length(u)
-                P̂ = 0.5 * [1.0 -1.0im; 1.0 1.0im]
+                P = 0.5 * [1.0 -1.0im; 1.0 1.0im]
                 Iₙ = Matrix(I, n, n)
-                P = kron(Iₙ, P̂)
-                J = ((P * J_) / P)[1:2:(2 * n - 1), 1:2:(2 * n - 1)]
-                return J
+                PP = kron(Iₙ, P)
+                JJ = ((PP * J) / PP)[1:2:(2n-1), 1:2:(2n-1)]
+                return JJ
             end
             Df! = function (J, du, u, t)
                 J .= Df(u, t)
                 return J
             end
             return NonlinearRightHandSide(f, f!, Df, Df!)
+        else
+            throw(ArgumentError("`NonlinearRightHandSide(f!_or_f; ...)` needs `f!_or_f` with signature `f!(du, u, t)` or `f(u, t)`."))
         end
     else
-        # f!_or_f ?= f!(du, u, t)
-        if hasmethod(f!_or_f, NTuple{3, Any})
+        if hasmethod(f!_or_f, NTuple{3, Any}) # f!_or_f like f!(du, u, t)?
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
             Df = (u, t) -> ForwardDiff.jacobian((du, u) -> f!(du, u, t), similar(u), u)
             Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, (du, u) -> f!(du, u, t), du, u)
             return NonlinearRightHandSide(f, f!, Df, Df!)
-        # f!_or_f ?= f(u, t)
-        elseif hasmethod(f!_or_f, NTuple{2, Any})
+        elseif hasmethod(f!_or_f, NTuple{2, Any}) # f!_or_f like f(u, t)?
             f = f!_or_f
             f! = (du, u, t) -> du .= f(u, t)
             Df = (u, t) -> ForwardDiff.jacobian(u -> f(u, t), u)
             Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, u -> f(u, t), u)
             return NonlinearRightHandSide(f, f!, Df, Df!)
+        else
+            throw(ArgumentError("`NonlinearRightHandSide(f!_or_f; ...)` needs `f!_or_f` with signature `f!(du, u, t)` or `f(u, t)`."))
         end
     end
 end
-@doc (@doc NonlinearRightHandSide) NRHS(args...; kwargs...) = NonlinearRightHandSide(args...; kwargs...)
-@doc (@doc NRHS) RHS(args...; kwargs...) = NRHS(args...; kwargs...)
 
-#####
-##### Methods
-#####
+@doc (@doc NonlinearRightHandSide) RHS(args...; kwargs...) = NonlinearRightHandSide(args...; kwargs...)
+
+#----------------------------------------- METHODS -----------------------------------------
 
 function (rhs::NonlinearRightHandSide)(u, t)
     @↓ f = rhs
     du = f(u, t)
     return du
 end
+
 function (rhs::NonlinearRightHandSide)(du, u, t)
     @↓ f! = rhs
     # @! du = f(u, t)

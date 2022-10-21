@@ -19,7 +19,7 @@ include("plot.jl")
 function solve end
 function solve! end
 
-export AbstractShowable
+export AbstractObject
 
 export AbstractProblem
 export AbstractSolver
@@ -35,7 +35,7 @@ export AbstractInitialValueCache
 export AbstractRightHandSide
 
 export InitialValueProblem, IVP
-export NonlinearRightHandSide, NRHS, RHS
+export NonlinearRightHandSide, RHS
 export LinearRightHandSide, LRHS
 export SplitRightHandSide, SRHS
 

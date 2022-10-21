@@ -11,8 +11,8 @@
 # v = NSDEVector{u_T}(undef, n₁, n₂, d)
 # v = NSDEVector{u_T}(undef, n₁, n₂, n₃, d)
 
-# Vector{u_T}(undef, n, d) where u_T = Vector{u_T}[Vector{u_T}(undef, d) for i = 1:n]
-# Vector{u_T}(undef, n₂, n₁, d) where u_T = Vector{Vector{u_T}}[Vector{u_T}(undef, n₁, d) for i = 1:n₂]
+Vector{u_T}(undef, n, d) where u_T = Vector{u_T}[Vector{u_T}(undef, d) for i = 1:n]
+Vector{u_T}(undef, n₂, n₁, d) where u_T = Vector{Vector{u_T}}[Vector{u_T}(undef, n₁, d) for i = 1:n₂]
 
 zero!(v::AbstractVector{<:Number}) = fill!(v, zero(eltype(v)))
 function zero!(v::AbstractVector{<:AbstractVector{<:Number}})
@@ -21,3 +21,11 @@ function zero!(v::AbstractVector{<:AbstractVector{<:Number}})
     end
     return v
 end
+
+# function norm(v::AbstractVector{<:AbstractVector{<:Number}})
+#     r = zero(eltype(v))
+#     for i in eachindex(v)
+#         r += norm(v[i])
+#     end
+#     return r
+# end
