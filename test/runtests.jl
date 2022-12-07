@@ -9,7 +9,6 @@ using Test
     @test problem isa InitialValueProblem
     @test problem.u0 isa AbstractVector{<:AbstractFloat}
     @test problem.tspan isa Tuple{AbstractFloat, AbstractFloat}
-    # @test repr(problem) == ???
     
     f!(du, u, t) = du .= u
     u0 = t0 = tN = 0.0
@@ -19,17 +18,12 @@ using Test
     @test problem.u0 isa AbstractVector{<:AbstractFloat}
     @test problem.tspan isa Tuple{AbstractFloat, AbstractFloat}
     
-    problem2 = copy(problem)
-    @test problem2.rhs == problem.rhs
-    @test problem2.u0 == problem.u0
-    @test problem2.tspan == problem.tspan
-    
     u0 = [1.0]
     t0 = tN = 1.0
-    problem3 = makesub(problem, u0, t0, tN)
-    @test problem3.rhs == problem.rhs
-    @test problem3.u0 == u0
-    @test problem3.tspan == (t0, tN)
+    subproblem = subproblemof(problem, u0, t0, tN)
+    @test subproblem.rhs == problem.rhs
+    @test subproblem.u0 == u0
+    @test subproblem.tspan == (t0, tN)
 end
 
 @testset "RHS" begin
@@ -42,13 +36,6 @@ end
     @test problem.rhs.f! isa Function
     @test problem.rhs.Df isa Function
     @test problem.rhs.Df! isa Function
-    # @test repr(problem.rhs) == ???
-    
-    rhs2 = copy(problem.rhs)
-    @test rhs2.f == problem.rhs.f
-    @test rhs2.f! == problem.rhs.f!
-    @test rhs2.Df == problem.rhs.Df
-    @test rhs2.Df! == problem.rhs.Df!
 end
 
 @testset "ODEs" begin
@@ -56,7 +43,7 @@ end
     @test Logistic() isa InitialValueProblem
     @test SimplePendulum() isa InitialValueProblem
     @test DoublePendulum() isa InitialValueProblem
-    @test VanderPol() isa InitialValueProblem
+    @test VanDerPol() isa InitialValueProblem
     @test Rössler() isa InitialValueProblem
     @test Lorenz() isa InitialValueProblem
     @test Lorenz96() isa InitialValueProblem
