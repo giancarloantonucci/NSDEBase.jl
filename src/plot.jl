@@ -1,11 +1,11 @@
-# RungeKutta.jl
+# NSDERungeKutta.jl
 mutable struct _PhasePlot{object_T}
     object::object_T
 end
 @userplot PHASEPLOT
 @recipe f(h::PHASEPLOT) = _PhasePlot(h.args[1])
 
-# TimeParallel.jl, MovingWindow.jl
+# NSDETimeParallel.jl, NSDEMovingWindow.jl
 mutable struct _Convergence{object_T}
     object::object_T
 end
