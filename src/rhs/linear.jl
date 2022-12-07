@@ -43,6 +43,12 @@ LinearRightHandSide(L::Number) = LinearRightHandSide(hcat(L)) # hcat(Number) ret
 
 #----------------------------------------- METHODS -----------------------------------------
 
+"""
+    (rhs::LinearRightHandSide)(u, t)
+    (rhs::LinearRightHandSide)(du, u, t)
+
+computes the derivative `du` from the solution `u` and time `t`.
+"""
 function (rhs::LinearRightHandSide)(u, t)
     @↓ L, g = rhs
     du = L * u
