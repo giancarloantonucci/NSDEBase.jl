@@ -25,6 +25,12 @@ SplitRightHandSide(stiff::Union{NonlinearRightHandSide, LinearRightHandSide, Fun
 
 #----------------------------------- METHODS -----------------------------------
 
+"""
+    (rhs::SplitRightHandSide)(u, t)
+    (rhs::SplitRightHandSide)(du, u, t)
+
+computes the derivative `du` from the solution `u` and time `t`.
+"""
 function (rhs::SplitRightHandSide)(u, t)
     @↓ stiff, nonstiff = rhs
     du = stiff(u, t) + nonstiff(u, t)
