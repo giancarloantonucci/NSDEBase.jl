@@ -4,7 +4,7 @@
 prints the full description of an `object` and its contents to a stream `io`.
 """
 function Base.show(io::IO, object::AbstractObject)
-    print(io, nameof(typeof(object)), ":")
+    print(io, nameof(typeof(object)))
     padding = get(io, :padding, "")
     thislevel = get(io, :thislevel, 1)
     namesoffields = propertynames(object)
@@ -19,10 +19,10 @@ function Base.show(io::IO, object::AbstractObject)
         level = thislevel
         field = getproperty(object, nameoffield)
         if field !== nothing
-            print(io, "\n", padding, n < numberofnames ? "├── " : "└── ", string(nameoffield))
+            print(io, "\n", padding, n < numberofnames ? "├─── " : "└─── ", string(nameoffield))
             if thislevel < 5 && !(field isa AbstractArray)
                 level += 1
-                tmpio = IOContext(io, :padding => string(padding, n < numberofnames ? "│   " : "    "), :thislevel => level)
+                tmpio = IOContext(io, :padding => string(padding, n < numberofnames ? "│    " : "     "), :thislevel => level)
                 print(tmpio, " = ")
                 show(tmpio, field)
             else
