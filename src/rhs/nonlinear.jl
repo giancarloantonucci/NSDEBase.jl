@@ -7,6 +7,7 @@ A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in 
 ```julia
 NonlinearRightHandSide(f, f!, Df, Df!)
 NonlinearRightHandSide(f!_or_f, iscomplex=false)
+RightHandSide(args...; kwargs...)
 RHS(args...; kwargs...)
 ```
 
@@ -15,13 +16,6 @@ RHS(args...; kwargs...)
 `f! :: Function` : $f$ (in-place).
 `Df :: Function` : Jacobian of $f$.
 `Df! :: Function` : Jacobian of $f$ (in-place).
-
-# Methods
-
-    (rhs::NonlinearRightHandSide)(u, t)
-    (rhs::NonlinearRightHandSide)(du, u, t)
-
-computes the derivative `du` from the solution `u` and time `t`.
 """
 struct NonlinearRightHandSide{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!_T<:Function} <: AbstractRightHandSide
     f::f_T
@@ -71,6 +65,7 @@ function NonlinearRightHandSide(f!_or_f::Function; iscomplex::Bool=false)
             throw(ArgumentError("`NonlinearRightHandSide(f!_or_f; ...)` needs `f!_or_f` with signature `f!(du, u, t)` or `f(u, t)`."))
         end
     else
+        # ToDo: NSDEFiniteDifference
         if hasmethod(f!_or_f, NTuple{3, Any}) # f!_or_f like f!(du, u, t)?
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
@@ -89,10 +84,17 @@ function NonlinearRightHandSide(f!_or_f::Function; iscomplex::Bool=false)
     end
 end
 
-@doc (@doc NonlinearRightHandSide) RHS(args...; kwargs...) = NonlinearRightHandSide(args...; kwargs...)
+@doc (@doc NonlinearRightHandSide) RightHandSide(args...; kwargs...) = NonlinearRightHandSide(args...; kwargs...)
+@doc (@doc RightHandSide) RHS(args...; kwargs...) = RightHandSide(args...; kwargs...)
 
 #----------------------------------------- METHODS -----------------------------------------
 
+"""
+    (rhs::NonlinearRightHandSide)(u, t)
+    (rhs::NonlinearRightHandSide)(du, u, t)
+
+computes the derivative `du` from the solution `u` and time `t`.
+"""
 function (rhs::NonlinearRightHandSide)(u, t)
     @↓ f = rhs
     du = f(u, t)
