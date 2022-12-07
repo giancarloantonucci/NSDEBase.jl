@@ -124,7 +124,7 @@ function Lorenz96(u0=[1.01; ones(39)], tspan=(0.0, 1.0); F=8.0)
         error("Lorenz96 requires N ≥ 4.")
     end
     function f!(du, u, t)
-        for i in 1:length(du)
+        for i in eachindex(du)
             # Periodic BCs at i = 1, 2, N
             if i == 1
                 du[1] = (u[2] - u[N-1]) * u[N] - u[1] + F
