@@ -15,23 +15,34 @@ All exported types and functions are considered part of the public API, and thus
 ### Abstract types
 
 ```@docs
-AbstractNSDEType
-AbstractNSDEProblem
-AbstractNSDESolver
-AbstractNSDESolution
+AbstractObject
+AbstractProblem
+AbstractSolver
+AbstractSolution
+AbstractParameters
+AbstractCache
+```
+
+```@docs
 AbstractInitialValueProblem
 AbstractInitialValueSolver
 AbstractInitialValueSolution
+AbstractInitialValueParameters
+AbstractInitialValueCache
 AbstractRightHandSide
 ```
 
 ### Composite types
 
 ```@docs
+LinearRightHandSide
+NonlinearRightHandSide
+SplitRightHandSide
+```
+
+```@docs
 InitialValueProblem
 subproblemof
-RightHandSide
-SplitRightHandSide
 ```
 
 ### ODEs
@@ -40,7 +51,8 @@ SplitRightHandSide
 Dahlquist
 Logistic
 SimplePendulum
-VanderPol
+DoublePendulum
+VanDerPol
 Rössler
 Lorenz
 Lorenz96
