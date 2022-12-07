@@ -22,9 +22,6 @@ struct InitialValueProblem{rhs_T<:AbstractRightHandSide, u0_T<:(AbstractVector{�
     rhs::rhs_T
     u0::u0_T
     tspan::tspan_T
-    function InitialValueProblem(rhs::rhs_T, u0::u0_T, tspan::tspan_T) where {rhs_T, u0_T, tspan_T}
-        return new{rhs_T, u0_T, tspan_T}(deepcopy(rhs), deepcopy(u0), deepcopy(tspan))
-    end
 end
 
 InitialValueProblem(L::Union{AbstractMatrix{ℂ}, ℂ}, u0::AbstractVector{ℂ}, tspan::Tuple{ℝ, ℝ}) where {ℂ<:Number, ℝ<:Real} = InitialValueProblem(LRHS(L), u0, tspan)
@@ -36,7 +33,7 @@ InitialValueProblem(rhs::Union{AbstractRightHandSide, Function, AbstractMatrix{�
 #---------------------------------- FUNCTIONS ----------------------------------
 
 """
-    subproblemof(problem, u0, tspan)  :: InitialValueProblem
+    subproblemof(problem, u0, tspan) :: InitialValueProblem
     subproblemof(problem, u0, t0, tN) :: InitialValueProblem
 
 returns a subproblem of `problem` with the same `rhs` but different `u0` and `tspan`.
