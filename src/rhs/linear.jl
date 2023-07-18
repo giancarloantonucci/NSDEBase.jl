@@ -23,20 +23,20 @@ struct LinearRightHandSide{L_T<:AbstractMatrix{<:Number}, g_T<:Union{Function,No
 end
 
 function LinearRightHandSide(L::AbstractMatrix{<:Number}, g!_or_g::Function)
-    if hasmethod(g!_or_g, NTuple{2, Any}) # g!_or_g like g!(du, t)?
+    if hasmethod(g!_or_g, NTuple{2, Any}) # i.e. has g!_or_g signature g!(du, t)?
         g! = g!_or_g
         g = t -> g!(similar(L, size(L, 1)), t)
         return LinearRightHandSide(L, g, g!)
-    elseif hasmethod(g!_or_g, NTuple{1, Any}) # g!_or_g like g(t)?
+    elseif hasmethod(g!_or_g, NTuple{1, Any}) # i.e. has g!_or_g signature g(t)?
         g = g!_or_g
         g! = (du, t) -> du .= g(t)
         return LinearRightHandSide(L, g, g!)
     else
-        throw(ArgumentError("`LinearRightHandSide(L, g!_or_g)` needs `g!_or_g` with signature `g!(du, t)` or `g(t)`."))
+        throw(ArgumentError("`LinearRightHandSide(L, g!_or_g)` needs `g!_or_g` to have signature `g!(du, t)` or `g(t)`."))
     end
 end
 
-LinearRightHandSide(L::Number, g!_or_g::Function) = LinearRightHandSide(hcat(L), g!_or_g)
+LinearRightHandSide(L::Number, g!_or_g::Function) = LinearRightHandSide(hcat(L), g!_or_g) # hcat(Number) returns a Matrix
 LinearRightHandSide(L::AbstractMatrix{<:Number}) = LinearRightHandSide(L, nothing, nothing)
 LinearRightHandSide(L::Number) = LinearRightHandSide(hcat(L)) # hcat(Number) returns a Matrix
 @doc (@doc LinearRightHandSide) LRHS(args...; kwargs...) = LinearRightHandSide(args...; kwargs...)
@@ -52,9 +52,7 @@ computes the derivative `du` from the solution `u` and time `t`.
 function (rhs::LinearRightHandSide)(u, t)
     @↓ L, g = rhs
     du = L * u
-    if g isa Nothing
-        error("Cannot compute rhs(u, t): g isa Nothing.")
-    else
+    if !(g isa Nothing)
         du .+= g(t)
     end
     return du
@@ -64,9 +62,7 @@ function (rhs::LinearRightHandSide)(du, u, t)
     @↓ L, g! = rhs
     # @! du = L * u
     mul!(du, L, u)
-    if g! isa Nothing
-        error("Cannot compute rhs(du, u, t): g! isa Nothing.")
-    else
+    if !(g! isa Nothing)
         # @! du .+= g(t)
         v = similar(du)
         g!(v, t)
