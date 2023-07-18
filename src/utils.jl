@@ -1,6 +1,6 @@
 # ToDo: NSDEVector
-Vector{u_T}(undef, n, d) where u_T = Vector{u_T}[Vector{u_T}(undef, d) for i = 1:n]
-Vector{u_T}(undef, n₂, n₁, d) where u_T = Vector{Vector{u_T}}[Vector{u_T}(undef, n₁, d) for i = 1:n₂]
+Vector{u_T}(undef, N, d) where u_T = Vector{u_T}[Vector{u_T}(undef, d) for i = 1:N]
+Vector{u_T}(undef, N2, N1, d) where u_T = Vector{Vector{u_T}}[Vector{u_T}(undef, N1, d) for i = 1:N2]
 
 # ToDo: zero!(v::NSDEVector)
 zero!(v::AbstractVector{<:Number}) = fill!(v, zero(eltype(v)))
