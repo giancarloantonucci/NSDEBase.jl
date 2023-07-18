@@ -6,7 +6,7 @@ A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in 
 # Constructors
 ```julia
 NonlinearRightHandSide(f, f!, Df, Df!)
-NonlinearRightHandSide(f!_or_f, iscomplex=false)
+NonlinearRightHandSide(f!_or_f, is_complex=false)
 RightHandSide(args...; kwargs...)
 RHS(args...; kwargs...)
 ```
@@ -24,10 +24,10 @@ struct NonlinearRightHandSide{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!
     Df!::Df!_T
 end
 
-function NonlinearRightHandSide(f!_or_f::Function; iscomplex::Bool=false)
-    if iscomplex
+function NonlinearRightHandSide(f!_or_f::Function; is_complex::Bool=false)
+    if is_complex
         # Jacobian via Wirtinger derivatives
-        if hasmethod(f!_or_f, NTuple{3, Any}) # f!_or_f like f!(du, u, t)?
+        if hasmethod(f!_or_f, NTuple{3, Any}) # i.e. has f!_or_f signature f!(du, u, t)?
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
             Df = function (u, t)
@@ -44,7 +44,7 @@ function NonlinearRightHandSide(f!_or_f::Function; iscomplex::Bool=false)
                 return J
             end
             return NonlinearRightHandSide(f, f!, Df, Df!)
-        elseif hasmethod(f!_or_f, NTuple{2, Any}) # f!_or_f like f(u, t)?
+        elseif hasmethod(f!_or_f, NTuple{2, Any}) # i.e. has f!_or_f signature f(u, t)?
             f = f!_or_f
             f! = (du, u, t) -> du .= f(u, t)
             Df = function (u, t)
@@ -62,24 +62,24 @@ function NonlinearRightHandSide(f!_or_f::Function; iscomplex::Bool=false)
             end
             return NonlinearRightHandSide(f, f!, Df, Df!)
         else
-            throw(ArgumentError("`NonlinearRightHandSide(f!_or_f; ...)` needs `f!_or_f` with signature `f!(du, u, t)` or `f(u, t)`."))
+            throw(ArgumentError("`NonlinearRightHandSide(f!_or_f; ...)` needs `f!_or_f` to have signature `f!(du, u, t)` or `f(u, t)`."))
         end
     else
-        # ToDo: NSDEFiniteDifference
-        if hasmethod(f!_or_f, NTuple{3, Any}) # f!_or_f like f!(du, u, t)?
+        # ToDo: Replace with NSDEFiniteDifference
+        if hasmethod(f!_or_f, NTuple{3, Any}) # i.e. has f!_or_f signature f!(du, u, t)?
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
             Df = (u, t) -> ForwardDiff.jacobian((du, u) -> f!(du, u, t), similar(u), u)
             Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, (du, u) -> f!(du, u, t), du, u)
             return NonlinearRightHandSide(f, f!, Df, Df!)
-        elseif hasmethod(f!_or_f, NTuple{2, Any}) # f!_or_f like f(u, t)?
+        elseif hasmethod(f!_or_f, NTuple{2, Any}) # i.e. has f!_or_f signature f(u, t)?
             f = f!_or_f
             f! = (du, u, t) -> du .= f(u, t)
             Df = (u, t) -> ForwardDiff.jacobian(u -> f(u, t), u)
             Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, u -> f(u, t), u)
             return NonlinearRightHandSide(f, f!, Df, Df!)
         else
-            throw(ArgumentError("`NonlinearRightHandSide(f!_or_f; ...)` needs `f!_or_f` with signature `f!(du, u, t)` or `f(u, t)`."))
+            throw(ArgumentError("`NonlinearRightHandSide(f!_or_f; ...)` needs `f!_or_f` to have signature `f!(du, u, t)` or `f(u, t)`."))
         end
     end
 end
