@@ -1,7 +1,7 @@
 @doc raw"""
     SplitRightHandSide <: AbstractRightHandSide
 
-A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in the form $f_s(u, t) + f_{ns}(u, t)$.
+A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in the form $f_\text{s}(u, t) + f_\text{ns}(u, t)$.
 
 # Constructors
 ```julia
@@ -10,17 +10,20 @@ SRHS(args...; kwargs...)
 ```
 
 # Arguments
-- `stiff :: Union{NonlinearRightHandSide, LinearRightHandSide, Function, AbstractMatrix{ℂ}, ℂ} where ℂ<:Number` : $f_s$.
-- `nonstiff :: Union{NonlinearRightHandSide, Function}` : $f_{ns}$.
+- `stiff :: Union{LinearRightHandSide, NonlinearRightHandSide}` : $f_\text{s}$, the stiff part of the right-hand side function.
+- `nonstiff :: NonlinearRightHandSide}` : $f_\text{ns}$, the non-stiff part of the right-hand side function.
 """
-struct SplitRightHandSide{stiff_T<:Union{LinearRightHandSide, NonlinearRightHandSide}, nonstiff_T<:NonlinearRightHandSide} <: AbstractRightHandSide
-    stiff::stiff_T
-    nonstiff::nonstiff_T
+struct SplitRightHandSide{
+    stiff_T <: Union{LinearRightHandSide, NonlinearRightHandSide},
+    nonstiff_T <: NonlinearRightHandSide,
+    } <: AbstractRightHandSide
+    stiff :: stiff_T
+    nonstiff :: nonstiff_T
 end
 
-SplitRightHandSide(fₛ::Function, nonstiff::NonlinearRightHandSide) = SplitRightHandSide(NRHS(fₛ), nonstiff)
-SplitRightHandSide(L::Union{AbstractMatrix{ℂ}, ℂ}, nonstiff::NonlinearRightHandSide) where ℂ<:Number = SplitRightHandSide(LRHS(L), nonstiff)
-SplitRightHandSide(stiff::Union{NonlinearRightHandSide, LinearRightHandSide, Function, AbstractMatrix{ℂ}, ℂ}, fₙₛ::Function) where ℂ<:Number = SplitRightHandSide(stiff, NRHS(fₙₛ))
+SplitRightHandSide(f_s::Function, nonstiff::NonlinearRightHandSide) = SplitRightHandSide(NRHS(f_s), nonstiff)
+SplitRightHandSide(L::Union{Number, AbstractMatrix{<:Number}}, nonstiff::NonlinearRightHandSide) = SplitRightHandSide(LRHS(L), nonstiff)
+SplitRightHandSide(stiff::Union{Number, AbstractMatrix{<:Number}, Function, LinearRightHandSide, NonlinearRightHandSide}, f_ns::Function) = SplitRightHandSide(stiff, NRHS(f_ns))
 @doc (@doc SplitRightHandSide) SRHS(args...; kwargs...) = SplitRightHandSide(args...; kwargs...)
 
 #----------------------------------- METHODS -----------------------------------
@@ -29,7 +32,7 @@ SplitRightHandSide(stiff::Union{NonlinearRightHandSide, LinearRightHandSide, Fun
     (rhs::SplitRightHandSide)(u, t)
     (rhs::SplitRightHandSide)(du, u, t)
 
-computes the derivative `du` from the solution `u` and time `t`.
+returns the derivative `du` from the solution `u` and time `t`.
 """
 function (rhs::SplitRightHandSide)(u, t)
     @↓ stiff, nonstiff = rhs

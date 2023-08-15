@@ -1,8 +1,7 @@
 @doc raw"""
     LinearRightHandSide <: AbstractRightHandSide
 
-A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in the form
-$Lu + g(t)$.
+A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in the form $Lu + g(t)$.
 
 # Constructors
 ```julia
@@ -12,14 +11,18 @@ LRHS(args...; kwargs...)
 ```
 
 # Arguments
-- `L :: Union{Number,AbstractMatrix{<:Number}}` : $L$.
-- `g :: Union{Function,Nothing}` : $g$.
-- `g! :: Union{Function,Nothing}` : $g$ (in-place).
+- `L :: AbstractMatrix` : $L$, the coefficient term.
+- `g :: Function` : $g$, the forcing term.
+- `g! :: Function` : $g$ (in-place).
 """
-struct LinearRightHandSide{L_T<:AbstractMatrix{<:Number}, g_T<:Union{Function,Nothing}, g!_T<:Union{Function,Nothing}} <: AbstractRightHandSide
-    L::L_T
-    g::g_T
-    g!::g!_T
+struct LinearRightHandSide{
+    L_T <: AbstractMatrix{<:Number},
+    g_T <: Union{Function, Nothing},
+    g!_T <: Union{Function, Nothing},
+    } <: AbstractRightHandSide
+    L :: L_T
+    g :: g_T
+    g! :: g!_T
 end
 
 function LinearRightHandSide(L::AbstractMatrix{<:Number}, g!_or_g::Function)
@@ -36,7 +39,7 @@ function LinearRightHandSide(L::AbstractMatrix{<:Number}, g!_or_g::Function)
     end
 end
 
-LinearRightHandSide(L::Number, g!_or_g::Function) = LinearRightHandSide(hcat(L), g!_or_g) # hcat(Number) returns a Matrix
+LinearRightHandSide(L::Number, g!_or_g::Function) = LinearRightHandSide(hcat(L), g!_or_g) # hcat(::Number) returns a Matrix
 LinearRightHandSide(L::AbstractMatrix{<:Number}) = LinearRightHandSide(L, nothing, nothing)
 LinearRightHandSide(L::Number) = LinearRightHandSide(hcat(L)) # hcat(Number) returns a Matrix
 @doc (@doc LinearRightHandSide) LRHS(args...; kwargs...) = LinearRightHandSide(args...; kwargs...)
@@ -47,7 +50,7 @@ LinearRightHandSide(L::Number) = LinearRightHandSide(hcat(L)) # hcat(Number) ret
     (rhs::LinearRightHandSide)(u, t)
     (rhs::LinearRightHandSide)(du, u, t)
 
-computes the derivative `du` from the solution `u` and time `t`.
+returns the derivative `du` from the solution `u` and time `t`.
 """
 function (rhs::LinearRightHandSide)(u, t)
     @↓ L, g = rhs

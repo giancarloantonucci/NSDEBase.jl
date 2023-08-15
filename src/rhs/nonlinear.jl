@@ -12,16 +12,21 @@ RHS(args...; kwargs...)
 ```
 
 # Arguments
-`f :: Function` : $f$.
+`f :: Function` : $f$, the right-hand side function.
 `f! :: Function` : $f$ (in-place).
-`Df :: Function` : Jacobian of $f$.
-`Df! :: Function` : Jacobian of $f$ (in-place).
+`Df :: Function` : $\mathcal{D}f$, the Jacobian of $f$.
+`Df! :: Function` : $\mathcal{D}f$ (in-place).
 """
-struct NonlinearRightHandSide{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!_T<:Function} <: AbstractRightHandSide
-    f::f_T
-    f!::f!_T
-    Df::Df_T
-    Df!::Df!_T
+struct NonlinearRightHandSide{
+    f_T <: Function,
+    f!_T <: Function,
+    Df_T <: Function,
+    Df!_T <: Function,
+    } <: AbstractRightHandSide
+    f :: f_T
+    f! :: f!_T
+    Df :: Df_T
+    Df! :: Df!_T
 end
 
 function NonlinearRightHandSide(f!_or_f::Function; is_complex::Bool=false)
@@ -93,7 +98,7 @@ end
     (rhs::NonlinearRightHandSide)(u, t)
     (rhs::NonlinearRightHandSide)(du, u, t)
 
-computes the derivative `du` from the solution `u` and time `t`.
+returns the derivative `du` from the solution `u` and time `t`.
 """
 function (rhs::NonlinearRightHandSide)(u, t)
     @↓ f = rhs
