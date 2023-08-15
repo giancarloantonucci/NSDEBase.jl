@@ -16,7 +16,7 @@ IVP(args...; kwargs...)
 - `tspan :: Tuple` : end limits of time domain.
 
 # Functions
-- [`subproblemof`](@ref) : creates a subproblem.
+- [`new`](@ref) : new instance of problem with updated parameters.
 """
 struct InitialValueProblem{
     rhs_T <: AbstractRightHandSide,
@@ -37,10 +37,10 @@ InitialValueProblem(rhs::Union{ℂ, AbstractMatrix{ℂ}, Function, AbstractRight
 #---------------------------------- FUNCTIONS ----------------------------------
 
 """
-    subproblemof(problem, u0, tspan) :: InitialValueProblem
-    subproblemof(problem, u0, t0, tN) :: InitialValueProblem
+    new(problem, u0, tspan) :: InitialValueProblem
+    new(problem, u0, t0, tN) :: InitialValueProblem
 
-returns a subproblem of `problem` with the same `rhs` but different `u0` and `tspan`.
+returns a new instance of `problem` with the same `rhs` but different `u0` and `tspan`.
 """
-subproblemof(problem::InitialValueProblem, u0::Union{ℂ, AbstractVector{ℂ}}, tspan::Tuple{ℝ, ℝ}) where {ℂ <: Number, ℝ <: Real} = IVP(problem.rhs, u0, tspan)
-subproblemof(problem::InitialValueProblem, u0::Union{ℂ, AbstractVector{ℂ}}, t0::ℝ, tN::ℝ) where {ℂ <: Number, ℝ <: Real} = subproblemof(problem, u0, (t0, tN))
+new(problem::InitialValueProblem, u0::Union{ℂ, AbstractVector{ℂ}}, tspan::Tuple{ℝ, ℝ}) where {ℂ <: Number, ℝ <: Real} = IVP(problem.rhs, u0, tspan)
+new(problem::InitialValueProblem, u0::Union{ℂ, AbstractVector{ℂ}}, t0::ℝ, tN::ℝ) where {ℂ <: Number, ℝ <: Real} = new(problem, u0, (t0, tN))

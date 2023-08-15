@@ -12,7 +12,7 @@ using Test
     
     u0 = [1.0]
     t0 = tN = 1.0
-    subproblem = subproblemof(problem, u0, t0, tN)
+    subproblem = new(problem, u0, t0, tN)
     @test subproblem.rhs == problem.rhs
     @test subproblem.u0 == u0
     @test subproblem.tspan == (t0, tN)

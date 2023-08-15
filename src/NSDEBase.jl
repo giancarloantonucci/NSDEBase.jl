@@ -49,7 +49,7 @@ export Lorenz
 export Lorenz96
 
 export zero!
-export subproblemof
+export new
 export solve, solve!
 
 end
