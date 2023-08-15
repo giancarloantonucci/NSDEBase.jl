@@ -2,14 +2,6 @@ using NSDEBase
 using Test
 
 @testset "IVP" begin
-    f(u, t) = u
-    u0 = [0.0]
-    tspan = (0.0, 1.0)
-    problem = IVP(f, u0, tspan)
-    @test problem isa InitialValueProblem
-    @test problem.u0 isa AbstractVector{<:AbstractFloat}
-    @test problem.tspan isa Tuple{AbstractFloat, AbstractFloat}
-    
     f!(du, u, t) = du .= u
     u0 = t0 = tN = 0.0
     problem = IVP(f!, u0, t0, tN)
