@@ -1,7 +1,7 @@
 @doc raw"""
     NonlinearRightHandSide <: AbstractRightHandSide
 
-A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in the form $f(u, t)$.
+A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in the generic form $f(u, t)$.
 
 # Constructors
 ```julia
@@ -12,54 +12,79 @@ RHS(args...; kwargs...)
 ```
 
 # Arguments
-`f :: Function` : $f$, the right-hand side function.
-`f! :: Function` : $f$ (in-place).
-`Df :: Function` : $\mathcal{D}f$, the Jacobian of $f$.
-`Df! :: Function` : $\mathcal{D}f$ (in-place).
+- `f   :: Function` : $f$, the right-hand side function.
+- `f!  :: Function` : $f$ (in-place).
+- `Df  :: Function` : $\mathcal{D}f$, the Jacobian of $f$, with respect to $u$.
+- `Df! :: Function` : $\mathcal{D}f$ (in-place).
 """
 struct NonlinearRightHandSide{
-    f_T <: Function,
-    f!_T <: Function,
-    Df_T <: Function,
+    f_T   <: Function,
+    f!_T  <: Function,
+    Df_T  <: Function,
     Df!_T <: Function,
     } <: AbstractRightHandSide
-    f :: f_T
-    f! :: f!_T
-    Df :: Df_T
+    f   :: f_T
+    f!  :: f!_T
+    Df  :: Df_T
     Df! :: Df!_T
 end
 
 function NonlinearRightHandSide(f!_or_f::Function; is_complex::Bool=false)
     if is_complex
         # Jacobian via Wirtinger derivatives
-        if hasmethod(f!_or_f, NTuple{3, Any}) # i.e. has f!_or_f signature f!(du, u, t)?
+        # TODO: Allow for derivatives for real and imag components in NSDEFiniteDifference
+        if hasmethod(f!_or_f, NTuple{3, Any}) # has f!_or_f signature f!(du, u, t)?
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
+            # Df = function (u, t)
+            #     J = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+            #     n = length(u)
+            #     P = kron(Matrix(I, n, n), 0.5 * [1.0 -1.0im; 1.0 1.0im]) # switch basis
+            #     return ((P * J) / P)[1:2:(2n-1), 1:2:(2n-1)] # choose relevant elements
+            # end
             Df = function (u, t)
-                J = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+                ε = 0.001
                 n = length(u)
-                P = 0.5 * [1.0 -1.0im; 1.0 1.0im]
-                Iₙ = Matrix(I, n, n)
-                PP = kron(Iₙ, P)
-                JJ = ((PP * J) / PP)[1:2:(2n-1), 1:2:(2n-1)]
-                return JJ
+                J = zeros(Complex{Float64}, n, n)
+                for i = 1:n
+                    u_perturbed_real = copy(u)
+                    u_perturbed_imag = copy(u)
+                    u_perturbed_real[i] += ε
+                    u_perturbed_imag[i] += ε * 1im
+                    finite_diff_real = (f(u_perturbed_real, t) - f(u, t)) / ε
+                    finite_diff_imag = (f(u_perturbed_imag, t) - f(u, t)) / ε
+                    J[:, i] = (finite_diff_real + 1im * finite_diff_imag)
+                end
+                return J
             end
             Df! = function (J, du, u, t)
                 J .= Df(u, t)
                 return J
             end
             return NonlinearRightHandSide(f, f!, Df, Df!)
-        elseif hasmethod(f!_or_f, NTuple{2, Any}) # i.e. has f!_or_f signature f(u, t)?
+        elseif hasmethod(f!_or_f, NTuple{2, Any}) # has f!_or_f signature f(u, t)?
             f = f!_or_f
             f! = (du, u, t) -> du .= f(u, t)
+            # Df = function (u, t)
+            #     J = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+            #     n = length(u)
+            #     P = kron(Matrix(I, n, n), 0.5 * [1.0 -1.0im; 1.0 1.0im]) # switch basis
+            #     return ((P * J) / P)[1:2:(2n-1), 1:2:(2n-1)] # choose relevant elements
+            # end
             Df = function (u, t)
-                J = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+                ε = 0.001
                 n = length(u)
-                P = 0.5 * [1.0 -1.0im; 1.0 1.0im]
-                Iₙ = Matrix(I, n, n)
-                PP = kron(Iₙ, P)
-                JJ = ((PP * J) / PP)[1:2:(2n-1), 1:2:(2n-1)]
-                return JJ
+                J = zeros(Complex{Float64}, n, n)
+                for i = 1:n
+                    u_perturbed_real = copy(u)
+                    u_perturbed_imag = copy(u)
+                    u_perturbed_real[i] += ε
+                    u_perturbed_imag[i] += ε * 1im
+                    finite_diff_real = (f(u_perturbed_real, t) - f(u, t)) / ε
+                    finite_diff_imag = (f(u_perturbed_imag, t) - f(u, t)) / ε
+                    J[:, i] = (finite_diff_real + 1im * finite_diff_imag)
+                end
+                return J
             end
             Df! = function (J, du, u, t)
                 J .= Df(u, t)
@@ -70,14 +95,14 @@ function NonlinearRightHandSide(f!_or_f::Function; is_complex::Bool=false)
             throw(ArgumentError("`NonlinearRightHandSide(f!_or_f; ...)` needs `f!_or_f` to have signature `f!(du, u, t)` or `f(u, t)`."))
         end
     else
-        # ToDo: Replace with NSDEFiniteDifference
-        if hasmethod(f!_or_f, NTuple{3, Any}) # i.e. has f!_or_f signature f!(du, u, t)?
+        # TODO: Replace with NSDEFiniteDifference
+        if hasmethod(f!_or_f, NTuple{3, Any}) # has f!_or_f signature f!(du, u, t)?
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
             Df = (u, t) -> ForwardDiff.jacobian((du, u) -> f!(du, u, t), similar(u), u)
             Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, (du, u) -> f!(du, u, t), du, u)
             return NonlinearRightHandSide(f, f!, Df, Df!)
-        elseif hasmethod(f!_or_f, NTuple{2, Any}) # i.e. has f!_or_f signature f(u, t)?
+        elseif hasmethod(f!_or_f, NTuple{2, Any}) # has f!_or_f signature f(u, t)?
             f = f!_or_f
             f! = (du, u, t) -> du .= f(u, t)
             Df = (u, t) -> ForwardDiff.jacobian(u -> f(u, t), u)
