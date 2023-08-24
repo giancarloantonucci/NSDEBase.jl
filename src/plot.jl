@@ -1,11 +1,11 @@
-# NSDERungeKutta.jl
+# Used by NSDERungeKutta.jl
 mutable struct _PhasePlot{plottable_T}
     plottable :: plottable_T
 end
 @userplot PHASEPLOT
 @recipe f(h::PHASEPLOT) = _PhasePlot(h.args[1])
 
-# NSDETimeParallel.jl, NSDEMovingWindow.jl
+# Used by NSDETimeParallel.jl and NSDEMovingWindow.jl
 mutable struct _Convergence{plottable_T}
     plottable :: plottable_T
 end
