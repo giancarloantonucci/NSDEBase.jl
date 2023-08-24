@@ -7,15 +7,15 @@ function Base.show(io::IO, object::AbstractObject; depth=4)
     summary(io, object)
     names = propertynames(object)
     num_properties = length(names)
-    nothing_properties = 0
+    nothings = 0
     for n = num_properties:-1:1
         if getproperty(object, names[n]) isa Nothing
-            nothing_properties += 1
+            nothings += 1
         else
             break
         end
     end
-    num_properties -= nothing_properties
+    num_properties -= nothings
     padding = get(io, :padding, "")
     current_level = get(io, :current_level, 1)
     for (n, name) in enumerate(names)
