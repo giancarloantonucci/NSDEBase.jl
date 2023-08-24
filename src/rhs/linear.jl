@@ -1,7 +1,7 @@
 @doc raw"""
     LinearRightHandSide <: AbstractRightHandSide
 
-A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in the form $Lu + g(t)$.
+A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in the form $f(u, t) = L u + g(t)$.
 
 # Constructors
 ```julia
@@ -11,17 +11,17 @@ LRHS(args...; kwargs...)
 ```
 
 # Arguments
-- `L :: AbstractMatrix` : $L$, the coefficient term.
-- `g :: Function` : $g$, the forcing term.
-- `g! :: Function` : $g$ (in-place).
+- `L  :: AbstractMatrix` : $L$, the coefficient term.
+- `g  :: Function`       : $g$, the forcing term, independent of $u$.
+- `g! :: Function`       : $g$ (in-place).
 """
 struct LinearRightHandSide{
-    L_T <: AbstractMatrix{<:Number},
-    g_T <: Union{Function, Nothing},
+    L_T  <: AbstractMatrix{<:Number},
+    g_T  <: Union{Function, Nothing},
     g!_T <: Union{Function, Nothing},
     } <: AbstractRightHandSide
-    L :: L_T
-    g :: g_T
+    L  :: L_T
+    g  :: g_T
     g! :: g!_T
 end
 
