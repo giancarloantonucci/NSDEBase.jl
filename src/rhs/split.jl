@@ -10,14 +10,14 @@ SRHS(args...; kwargs...)
 ```
 
 # Arguments
-- `f_s  :: Union{LinearRightHandSide, NonlinearRightHandSide}` : $f_\text{s}$, the stiff part of the right-hand side function $f$.
-- `f_ns :: NonlinearRightHandSide}`                            : $f_\text{ns}$, the non-stiff part of the right-hand side function $f$.
+- `f_s :: Union{LinearRightHandSide, NonlinearRightHandSide}` : $f_\text{s}$, the stiff part of the right-hand side function $f$.
+- `f_ns :: NonlinearRightHandSide}` : $f_\text{ns}$, the non-stiff part of the right-hand side function $f$.
 """
 struct SplitRightHandSide{
-    f_s_T  <: Union{LinearRightHandSide, NonlinearRightHandSide},
+    f_s_T <: Union{LinearRightHandSide, NonlinearRightHandSide},
     f_ns_T <: NonlinearRightHandSide,
     } <: AbstractRightHandSide
-    f_s  :: f_s_T
+    f_s :: f_s_T
     f_ns :: f_ns_T
 end
 
