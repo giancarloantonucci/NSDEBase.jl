@@ -12,35 +12,34 @@ RHS(args...; kwargs...)
 ```
 
 # Arguments
-- `f :: Function` : $f$, the right-hand side function.
-- `f! :: Function` : $f$ (in-place).
-- `Df :: Function` : $\mathcal{D}f$, the Jacobian of $f$, with respect to $u$.
-- `Df! :: Function` : $\mathcal{D}f$ (in-place).
+- `f::Function` : $f$, the right-hand side function
+- `f!::Function` : $f$ (in-place)
+- `Df::Function` : $\mathcal{D}f$, the Jacobian of $f$, with respect to $u$
+- `Df!::Function` : $\mathcal{D}f$ (in-place)
 """
-struct NonlinearRightHandSide{
-    f_T <: Function,
-    f!_T <: Function,
-    Df_T <: Function,
-    Df!_T <: Function,
-    } <: AbstractRightHandSide
-    f :: f_T
-    f! :: f!_T
-    Df :: Df_T
-    Df! :: Df!_T
+struct NonlinearRightHandSide{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!_T<:Function} <: AbstractRightHandSide
+    f::f_T
+    f!::f!_T
+    Df::Df_T
+    Df!::Df!_T
 end
 
 function NonlinearRightHandSide(f!_or_f::Function; is_complex::Bool=false)
     if is_complex
         # Jacobian via Wirtinger derivatives
-        # 📌 Allow for derivatives for real and imag components in NSDEFiniteDifference
+        # TODO: Allow for derivatives for real and imag components in NSDEFiniteDifference
         if hasmethod(f!_or_f, NTuple{3, Any}) # has f!_or_f signature f!(du, u, t)?
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
             Df = function (u, t)
                 J = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+                # switch basis
                 n = length(u)
-                P = kron(Matrix(I, n, n), 0.5 * [1.0 -1.0im; 1.0 1.0im]) # switch basis
-                return ((P * J) / P)[1:2:(2n-1), 1:2:(2n-1)] # choose relevant elements
+                I_n = Matrix(I, n, n)
+                P = kron(I_n, 0.5 * [1.0 -1.0im; 1.0 1.0im])
+                J_p = (P * J) / P
+                # output relevant elements
+                return J_p[1:2:(2n-1), 1:2:(2n-1)]
             end
             # Df = function (u, t)
             #     ε = 0.001
@@ -67,9 +66,13 @@ function NonlinearRightHandSide(f!_or_f::Function; is_complex::Bool=false)
             f! = (du, u, t) -> du .= f(u, t)
             Df = function (u, t)
                 J = FiniteDifferences.jacobian(central_fdm(4, 1), u -> f(u, t), u)[1]
+                # switch basis
                 n = length(u)
-                P = kron(Matrix(I, n, n), 0.5 * [1.0 -1.0im; 1.0 1.0im]) # switch basis
-                return ((P * J) / P)[1:2:(2n-1), 1:2:(2n-1)] # choose relevant elements
+                I_n = Matrix(I, n, n)
+                P = kron(I_n, 0.5 * [1.0 -1.0im; 1.0 1.0im])
+                J_p = (P * J) / P
+                # output relevant elements
+                return J_p[1:2:(2n-1), 1:2:(2n-1)]
             end
             # Df = function (u, t)
             #     ε = 0.001
@@ -95,7 +98,7 @@ function NonlinearRightHandSide(f!_or_f::Function; is_complex::Bool=false)
             throw(ArgumentError("`NonlinearRightHandSide(f!_or_f; ...)` needs `f!_or_f` to have signature `f!(du, u, t)` or `f(u, t)`."))
         end
     else
-        # 📌 Replace with NSDEFiniteDifference
+        # TODO: Replace with NSDEFiniteDifference
         if hasmethod(f!_or_f, NTuple{3, Any}) # has f!_or_f signature f!(du, u, t)?
             f! = f!_or_f
             f = (u, t) -> f!(similar(u), u, t)
@@ -117,7 +120,7 @@ end
 @doc (@doc NonlinearRightHandSide) RightHandSide(args...; kwargs...) = NonlinearRightHandSide(args...; kwargs...)
 @doc (@doc RightHandSide) RHS(args...; kwargs...) = RightHandSide(args...; kwargs...)
 
-#----------------------------------------- METHODS -----------------------------------------
+#----------------------------------- METHODS -----------------------------------
 
 """
     (rhs::NonlinearRightHandSide)(u, t)

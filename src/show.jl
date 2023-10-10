@@ -29,7 +29,7 @@ function Base.show(io::IO, object::AbstractObject; depth=4)
         if current_level < depth
             level += 1
             io2 = IOContext(io, :padding => string(padding, is_property_last ? "   " : "│  "), :current_level => level)
-            print(io, " :: ")
+            print(io, "::")
             summary(io, property)
             if property isa Number || property isa AbstractArray
                 print(io, " = ")
@@ -38,7 +38,7 @@ function Base.show(io::IO, object::AbstractObject; depth=4)
                 show(io2, property)
             end
         else
-            print(io, " :: ")
+            print(io, "::")
             summary(io, property)
         end
     end

@@ -29,7 +29,7 @@ end
     @test problem.rhs.Df isa Function
     @test problem.rhs.Df! isa Function
 
-    # 📌 Add tests for LRHS and SRHS
+    # TODO: Add tests for LRHS and SRHS
 end
 
 @testset "ODEs" begin

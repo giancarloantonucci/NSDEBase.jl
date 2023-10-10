@@ -1,6 +1,6 @@
 """
-    Dahlquist(u0=0.5, tspan=(0.0, 1.0); λ=1.0) :: InitialValueProblem
-    Dahlquist(u0, t0, tN; kwargs...) :: InitialValueProblem
+    Dahlquist(u0=0.5, tspan=(0.0, 1.0); λ=1.0)::InitialValueProblem
+    Dahlquist(u0, t0, tN; kwargs...)::InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Dahlquist equation.
 """
@@ -8,8 +8,8 @@ Dahlquist(u0=0.5, tspan=(0.0, 1.0); λ=1.0) = InitialValueProblem(λ, u0, tspan)
 Dahlquist(u0, t0, tN; λ) = Dahlquist(u0, (t0, tN); λ)
 
 """
-    Logistic(u0=0.5, tspan=(0.0, 1.0); λ=1.0) :: InitialValueProblem
-    Logistic(u0, t0, tN; kwargs...) :: InitialValueProblem
+    Logistic(u0=0.5, tspan=(0.0, 1.0); λ=1.0)::InitialValueProblem
+    Logistic(u0, t0, tN; kwargs...)::InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Logistic equation.
 """
@@ -20,8 +20,8 @@ end
 Logistic(u0, t0, tN; λ) = Logistic(u0, (t0, tN); λ=λ)
 
 """
-    SimplePendulum(u0=[π/4, 0.0], tspan=(0.0, 2π/3 * √9.81)) :: InitialValueProblem
-    SimplePendulum(u0, t0, tN; kwargs...) :: InitialValueProblem
+    SimplePendulum(u0=[π/4, 0.0], tspan=(0.0, 2π/3 * √9.81))::InitialValueProblem
+    SimplePendulum(u0, t0, tN; kwargs...)::InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the simple pendulum problem.
 """
@@ -36,8 +36,8 @@ end
 SimplePendulum(u0, t0, tN) = SimplePendulum(u0, (t0, tN))
 
 """
-    DoublePendulum(u0=[π/4, π/4, 0.0, 0.0], tspan=(0.0, 1.0); μ=1.0, λ=1.0) :: InitialValueProblem
-    DoublePendulum(u0, t0, tN; kwargs...) :: InitialValueProblem
+    DoublePendulum(u0=[π/4, π/4, 0.0, 0.0], tspan=(0.0, 1.0); μ=1.0, λ=1.0)::InitialValueProblem
+    DoublePendulum(u0, t0, tN; kwargs...)::InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the double pendulum problem.
 """
@@ -63,8 +63,8 @@ end
 DoublePendulum(u0, t0, tN; μ, λ) = DoublePendulum(u0, (t0, tN); μ=μ, λ=λ)
 
 """
-    VanDerPol(u0=[1.0, 0.0], tspan=(0.0, 1.0); μ=1.0) :: InitialValueProblem
-    VanDerPol(u0, t0, tN; kwargs...) :: InitialValueProblem
+    VanDerPol(u0=[1.0, 0.0], tspan=(0.0, 1.0); μ=1.0)::InitialValueProblem
+    VanDerPol(u0, t0, tN; kwargs...)::InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Van der Pol equation (in first-order form).
 """
@@ -79,8 +79,8 @@ end
 VanDerPol(u0, t0, tN; μ) = VanDerPol(u0, (t0, tN); μ=μ)
 
 """
-    Rössler(u0=[2.0, 0.0, 0.0], tspan=(0.0, 1.0); α=0.2, β=0.2, γ=5.7) :: InitialValueProblem
-    Rössler(u0, t0, tN; kwargs...) :: InitialValueProblem
+    Rössler(u0=[2.0, 0.0, 0.0], tspan=(0.0, 1.0); α=0.2, β=0.2, γ=5.7)::InitialValueProblem
+    Rössler(u0, t0, tN; kwargs...)::InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Rössler equations.
 """
@@ -96,8 +96,8 @@ end
 Rössler(u0, t0, tN; α, β, γ) = Rössler(u0, (t0, tN); α=α, β=β, γ=γ)
 
 """
-    Lorenz(u0=[2.0, 3.0, -14.0], tspan=(0.0, 1.0); σ=10.0, β=8/3, ρ=28.0) :: InitialValueProblem
-    Lorenz(u0, t0, tN; kwargs...) :: InitialValueProblem
+    Lorenz(u0=[2.0, 3.0, -14.0], tspan=(0.0, 1.0); σ=10.0, β=8/3, ρ=28.0)::InitialValueProblem
+    Lorenz(u0, t0, tN; kwargs...)::InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Lorenz equations.
 """
@@ -113,8 +113,8 @@ end
 Lorenz(u0, t0, tN; σ, β, ρ) = Lorenz(u0, (t0, tN); σ=σ, β=β, ρ=ρ)
 
 """
-    Lorenz96(u0=[ones(39); 1.01], tspan=(0.0, 1.0); F=8.0) :: InitialValueProblem
-    Lorenz96(u0, t0, tN; kwargs...) :: InitialValueProblem
+    Lorenz96(u0=[ones(39); 1.01], tspan=(0.0, 1.0); F=8.0)::InitialValueProblem
+    Lorenz96(u0, t0, tN; kwargs...)::InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the Lorenz-96 equations.
 """
