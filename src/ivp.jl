@@ -16,7 +16,7 @@ IVP(args...; kwargs...)
 - `tspan::Tuple` : end limits of time domain
 
 # Functions
-- [`new`](@ref) : new instance of problem with updated parameters
+- [`copy`](@ref) : copy instance of problem with updated parameters
 """
 struct InitialValueProblem{rhs_T<:AbstractRightHandSide, u0_T<:AbstractVector{<:Number}, tspan_T<:(Tuple{ℝ,ℝ} where ℝ<:Real)} <: AbstractInitialValueProblem
     rhs::rhs_T
@@ -34,10 +34,10 @@ InitialValueProblem(rhs::Union{ℂ,AbstractMatrix{ℂ},Function,AbstractRightHan
 #---------------------------------- FUNCTIONS ----------------------------------
 
 """
-    new(problem, u0, tspan)::InitialValueProblem
-    new(problem, u0, t0, tN)::InitialValueProblem
+    copy(problem, u0, tspan)::InitialValueProblem
+    copy(problem, u0, t0, tN)::InitialValueProblem
 
-returns a new instance of `problem` with the same `rhs` but different `u0` and `tspan`.
+returns a copy of `problem` with the same `rhs` but different `u0` and `tspan`.
 """
-new(problem::InitialValueProblem, u0::Union{ℂ,AbstractVector{ℂ}}, tspan::Tuple{ℝ,ℝ}) where {ℂ<:Number, ℝ<:Real} = IVP(problem.rhs, u0, tspan)
-new(problem::InitialValueProblem, u0::Union{ℂ,AbstractVector{ℂ}}, t0::ℝ, tN::ℝ) where {ℂ<:Number, ℝ<:Real} = new(problem, u0, (t0, tN))
+Base.copy(problem::InitialValueProblem, u0::Union{ℂ,AbstractVector{ℂ}}, tspan::Tuple{ℝ,ℝ}) where {ℂ<:Number, ℝ<:Real} = IVP(problem.rhs, u0, tspan)
+Base.copy(problem::InitialValueProblem, u0::Union{ℂ,AbstractVector{ℂ}}, t0::ℝ, tN::ℝ) where {ℂ<:Number, ℝ<:Real} = copy(problem, u0, (t0, tN))

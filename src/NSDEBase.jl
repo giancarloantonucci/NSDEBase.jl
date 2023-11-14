@@ -14,7 +14,7 @@ include("rhs/linear.jl")
 include("rhs/split.jl")
 include("ivp.jl")
 include("odes.jl")
-include("plot.jl")
+include("plots_recipes.jl")
 
 function solve end
 function solve! end
@@ -49,7 +49,7 @@ export Lorenz
 export Lorenz96
 
 export zero!
-export new
+export copy
 export solve, solve!
 
 end
