@@ -43,20 +43,20 @@ returns an [`InitialValueProblem`](@ref) for the double pendulum problem.
 """
 function DoublePendulum(u0=[π/4, π/4, 0.0, 0.0], tspan=(0.0, 1.0); μ=1.0, λ=1.0)
     function f!(du, u, t)
-      θ₁, θ₂, ω₁, ω₂ = u
-      #
-      M₁₁ = 1 + μ
-      M₁₂ = M₂₁ = μ * λ * cos(θ₁ - θ₂)
-      M₂₂ = μ * λ^2
-      M = [M₁₁ M₁₂; M₂₁ M₂₂]
-      #
-      v₁ = - (1+μ) * sin(θ₁) - μ * λ * ω₂^2 * sin(θ₁ - θ₂)
-      v₂ = - μ * λ * sin(θ₂) + μ * λ * ω₁^2 * sin(θ₁ - θ₂)
-      v = [v₁; v₂]
-      #
-      du[1:2] .= u[3:4]
-      du[3:4] .= M \ v
-      return du
+        θ₁, θ₂, ω₁, ω₂ = u
+        #
+        M₁₁ = 1 + μ
+        M₁₂ = M₂₁ = μ * λ * cos(θ₁ - θ₂)
+        M₂₂ = μ * λ^2
+        M = [M₁₁ M₁₂; M₂₁ M₂₂]
+        #
+        v₁ = - (1+μ) * sin(θ₁) - μ * λ * ω₂^2 * sin(θ₁ - θ₂)
+        v₂ = - μ * λ * sin(θ₂) + μ * λ * ω₁^2 * sin(θ₁ - θ₂)
+        v = [v₁; v₂]
+        #
+        du[1:2] .= u[3:4]
+        du[3:4] .= M \ v
+        return du
     end
     return InitialValueProblem(f!, u0, tspan)
 end
