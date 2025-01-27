@@ -13,7 +13,7 @@ LRHS(args...; kwargs...)
 # Arguments
 - `L::AbstractMatrix` : $L$, the coefficient term
 - `g::Function` : $g$, the forcing term, independent of $u$
-- `g!::Function` : $g$ (in-place)
+- `g!::Function` : $g$ but in-place
 """
 struct LinearRightHandSide{L_T<:AbstractMatrix{<:Number}, g_T<:Union{Function,Nothing}, g!_T<:Union{Function,Nothing}} <: AbstractRightHandSide
     L::L_T
@@ -22,11 +22,11 @@ struct LinearRightHandSide{L_T<:AbstractMatrix{<:Number}, g_T<:Union{Function,No
 end
 
 function LinearRightHandSide(L::AbstractMatrix{<:Number}, g!_or_g::Function)
-    if hasmethod(g!_or_g, NTuple{2, Any}) # has g!_or_g signature g!(du, t)?
+    if hasmethod(g!_or_g, NTuple{2, Any}) # i.e. has g!_or_g signature g!(du, t)?
         g! = g!_or_g
         g = t -> g!(similar(L, size(L, 1)), t)
         return LinearRightHandSide(L, g, g!)
-    elseif hasmethod(g!_or_g, NTuple{1, Any}) # has g!_or_g signature g(t)?
+    elseif hasmethod(g!_or_g, NTuple{1, Any}) # i.e. has g!_or_g signature g(t)?
         g = g!_or_g
         g! = (du, t) -> du .= g(t)
         return LinearRightHandSide(L, g, g!)

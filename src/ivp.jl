@@ -41,3 +41,5 @@ returns a copy of `problem` with the same `rhs` but different `u0` and `tspan`.
 """
 Base.copy(problem::InitialValueProblem, u0::Union{ℂ,AbstractVector{ℂ}}, tspan::Tuple{ℝ,ℝ}) where {ℂ<:Number, ℝ<:Real} = IVP(problem.rhs, u0, tspan)
 Base.copy(problem::InitialValueProblem, u0::Union{ℂ,AbstractVector{ℂ}}, t0::ℝ, tN::ℝ) where {ℂ<:Number, ℝ<:Real} = copy(problem, u0, (t0, tN))
+Base.copy(problem::InitialValueProblem, tspan::Tuple{ℝ,ℝ}) where ℝ<:Real = copy(problem, problem.u0, tspan)
+Base.copy(problem::InitialValueProblem, t0::ℝ, tN::ℝ) where ℝ<:Real = copy(problem, (t0, tN))
