@@ -6,7 +6,7 @@ A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in 
 # Constructors
 ```julia
 NonlinearRightHandSide(f, f!, Df, Df!)
-NonlinearRightHandSide(f!_or_f, is_complex=false)
+NonlinearRightHandSide(f!_or_f, iscomplex=false)
 RightHandSide(args...; kwargs...)
 RHS(args...; kwargs...)
 ```
@@ -24,8 +24,8 @@ struct NonlinearRightHandSide{f_T<:Function, f!_T<:Function, Df_T<:Function, Df!
     Df!::Df!_T
 end
 
-function NonlinearRightHandSide(f!_or_f::Function; is_complex::Bool=false)
-    if is_complex
+function NonlinearRightHandSide(f!_or_f::Function; iscomplex::Bool=false)
+    if iscomplex
         # Jacobian via Wirtinger derivatives
         # TODO: Allow for derivatives for real and imag components in NSDEFiniteDifference
         if hasmethod(f!_or_f, NTuple{3, Any}) # i.e. has f!_or_f signature f!(du, u, t)?
