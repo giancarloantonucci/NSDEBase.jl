@@ -18,7 +18,7 @@ IVP(args...; kwargs...)
 # Functions
 - [`copy`](@ref) : copy instance of problem with updated parameters
 """
-struct InitialValueProblem{rhs_T<:AbstractRightHandSide, u0_T<:AbstractVector{<:Number}, tspan_T<:(Tuple{ℝ,ℝ} where ℝ<:Real)} <: AbstractInitialValueProblem
+mutable struct InitialValueProblem{rhs_T<:AbstractRightHandSide, u0_T<:AbstractVector{<:Number}, tspan_T<:(Tuple{ℝ,ℝ} where ℝ<:Real)} <: AbstractInitialValueProblem
     rhs::rhs_T
     u0::u0_T
     tspan::tspan_T
