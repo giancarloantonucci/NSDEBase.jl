@@ -24,9 +24,7 @@ jobs:
           julia --project=docs -e '
             using Pkg
             Pkg.develop(PackageSpec(path=pwd()))
-            Pkg.instantiate()
-            Pkg.build()
-            Pkg.precompile()'
+            Pkg.instantiate()'
       
       - name: Build and deploy documentation
         env:
