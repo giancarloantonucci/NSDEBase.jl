@@ -1,5 +1,8 @@
 using NSDEBase
 using Test
+# using Aqua
+
+# Aqua.test_all(NSDEBase)
 
 @testset "IVP" begin
     f!(du, u, t) = du .= u
