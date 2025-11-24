@@ -1,3 +1,5 @@
+# NSDEBase/src/plots_recipes.jl
+
 # Used by NSDERungeKutta.jl
 mutable struct _PhasePlot{plottable_T}
     plottable::plottable_T

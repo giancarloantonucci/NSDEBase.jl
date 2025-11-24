@@ -1,3 +1,5 @@
+# NSDEBase/src/rhs/split.jl
+
 @doc raw"""
     SplitRightHandSide <: AbstractRightHandSide
 

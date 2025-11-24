@@ -1,3 +1,5 @@
+# NSDEBase/src/abstract.jl
+
 "An abstract type for all objects in NSDEBase."
 abstract type AbstractObject end
 

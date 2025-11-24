@@ -1,3 +1,5 @@
+# NSDEBase/src/rhs/linear.jl
+
 @doc raw"""
     LinearRightHandSide <: AbstractRightHandSide
 
