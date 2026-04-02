@@ -21,6 +21,9 @@ include("plots_recipes.jl")
 function solve end
 function solve! end
 
+function initialize_cache end
+function initialize_solution end
+
 export AbstractObject
 
 export AbstractProblem
@@ -54,5 +57,6 @@ export Lorenz96
 export zero!
 export copy
 export solve, solve!
+export initialize_cache, initialize_solution
 
 end
