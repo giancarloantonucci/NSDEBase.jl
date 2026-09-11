@@ -47,8 +47,12 @@ LinearRightHandSide(L::Number) = LinearRightHandSide(hcat(L)) # hcat(Number)::Ma
 """
     (rhs::LinearRightHandSide)(u, t)
     (rhs::LinearRightHandSide)(du, u, t)
+    (rhs::LinearRightHandSide)(du, v, u, t)
 
-returns the derivative `du` from the solution `u` and time `t`.
+returns the derivative `du` from the solution `u` and time `t`. The 3-argument
+in-place form allocates a temporary when a forcing term `g` is present; the
+4-argument form takes caller-owned scratch `v` (same shape as `du`) instead and
+is allocation-free. Hot loops should use the 4-argument form.
 """
 function (rhs::LinearRightHandSide)(u, t)
     @↓ L, g = rhs
@@ -66,6 +70,18 @@ function (rhs::LinearRightHandSide)(du, u, t)
     if !(g! isa Nothing)
         # @! du .+= g(t)
         v = similar(du)
+        g!(v, t)
+        du .+= v
+    end
+    return du
+end
+
+function (rhs::LinearRightHandSide)(du, v, u, t)
+    @↓ L, g! = rhs
+    # @! du = L * u
+    mul!(du, L, u)
+    if !(g! isa Nothing)
+        # @! du .+= g(t)
         g!(v, t)
         du .+= v
     end

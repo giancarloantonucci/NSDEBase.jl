@@ -9,6 +9,8 @@ A composite type for an initial-value problem.
 ```julia
 InitialValueProblem(rhs, u0, tspan)
 InitialValueProblem(rhs, u0, t0, tN)
+InitialValueProblem(fₛ, fₙₛ, u0, tspan)
+InitialValueProblem(fₛ, fₙₛ, u0, t0, tN)
 IVP(args...; kwargs...)
 ```
 
@@ -26,11 +28,18 @@ mutable struct InitialValueProblem{rhs_T<:AbstractRightHandSide, u0_T<:AbstractV
     tspan::tspan_T
 end
 
-# TODO: Add methods for SRHS
 InitialValueProblem(L::Union{ℂ,AbstractMatrix{ℂ}}, u0::AbstractVector{ℂ}, tspan::Tuple{ℝ,ℝ}) where {ℂ<:Number, ℝ<:Real} = InitialValueProblem(LRHS(L), u0, tspan)
 InitialValueProblem(f::Function, u0::AbstractVector{<:Number}, tspan::Tuple{ℝ,ℝ}) where ℝ<:Real = InitialValueProblem(RHS(f), u0, tspan)
 InitialValueProblem(rhs::Union{ℂ,AbstractMatrix{ℂ},Function,AbstractRightHandSide}, u0::ℂ, tspan::Tuple{ℝ,ℝ}) where {ℂ<:Number, ℝ<:Real} = InitialValueProblem(rhs, [u0], tspan)
 InitialValueProblem(rhs::Union{ℂ,AbstractMatrix{ℂ},Function,AbstractRightHandSide}, u0::Union{ℂ,AbstractVector{ℂ}}, t0::ℝ, tN::ℝ) where {ℂ<:Number, ℝ<:Real} = InitialValueProblem(rhs, u0, (t0, tN))
+
+# SplitRightHandSide construction path, e.g. `IVP(L, fₙₛ, u0, tspan)` for f = L·u + fₙₛ(u, t):
+const _SplitStiffPart = Union{Number, AbstractMatrix{<:Number}, Function, LinearRightHandSide, NonlinearRightHandSide}
+const _SplitNonStiffPart = Union{Function, NonlinearRightHandSide}
+InitialValueProblem(fₛ::_SplitStiffPart, fₙₛ::_SplitNonStiffPart, u0::AbstractVector{<:Number}, tspan::Tuple{ℝ,ℝ}) where ℝ<:Real = InitialValueProblem(SplitRightHandSide(fₛ, fₙₛ), u0, tspan)
+InitialValueProblem(fₛ::_SplitStiffPart, fₙₛ::_SplitNonStiffPart, u0::Number, tspan::Tuple{ℝ,ℝ}) where ℝ<:Real = InitialValueProblem(fₛ, fₙₛ, [u0], tspan)
+InitialValueProblem(fₛ::_SplitStiffPart, fₙₛ::_SplitNonStiffPart, u0::Union{ℂ,AbstractVector{ℂ}}, t0::ℝ, tN::ℝ) where {ℂ<:Number, ℝ<:Real} = InitialValueProblem(fₛ, fₙₛ, u0, (t0, tN))
+
 @doc (@doc InitialValueProblem) IVP(args...; kwargs...) = InitialValueProblem(args...; kwargs...)
 
 #---------------------------------- FUNCTIONS ----------------------------------

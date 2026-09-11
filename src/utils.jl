@@ -1,10 +1,11 @@
 # NSDEBase/src/utils.jl
 
-# TODO: Write NSDEVector
-Vector{u_T}(undef, N, d) where u_T = Vector{u_T}[Vector{u_T}(undef, d) for i = 1:N]
-Vector{u_T}(undef, N2, N1, d) where u_T = Vector{Vector{u_T}}[Vector{u_T}(undef, N1, d) for i = 1:N2]
+"""
+    zero!(v::AbstractVector)
 
-# TODO: Change to zero!(v::NSDEVector)
+fills `v` with zeros in-place. Works on flat vectors of numbers and on nested
+vectors of vectors (e.g. stage arrays), recursing one level.
+"""
 zero!(v::AbstractVector{<:Number}) = fill!(v, zero(eltype(v)))
 function zero!(v::AbstractVector{<:AbstractVector{<:Number}})
     for i in eachindex(v)

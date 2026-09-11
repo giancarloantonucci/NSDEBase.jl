@@ -18,10 +18,39 @@ include("ivp.jl")
 include("odes.jl")
 include("plots_recipes.jl")
 
+"""
+    solve(problem, solver; kwargs...) :: AbstractSolution
+
+computes the solution of `problem` using `solver`, allocating a fresh cache and
+solution. Solver packages extend this function; hot loops should prefer the
+cache-reusing [`solve!`](@ref).
+"""
 function solve end
+
+"""
+    solve!(cache, solution, problem, solver) :: AbstractSolution
+    solve!(solution, problem, solver) :: AbstractSolution
+
+computes the solution of `problem` in-place, reusing `solution` and, in the
+4-argument form, a pre-allocated `cache`. This is the form every hot caller
+must use. Solver packages extend this function.
+"""
 function solve! end
 
+"""
+    initialize_cache(problem, solver) :: AbstractCache
+
+builds a reusable cache for solving `problem` with `solver`. Solver packages
+extend this function.
+"""
 function initialize_cache end
+
+"""
+    initialize_solution(problem, solver; kwargs...) :: AbstractSolution
+
+builds an empty solution object for solving `problem` with `solver`. Solver
+packages extend this function.
+"""
 function initialize_solution end
 
 export AbstractObject
