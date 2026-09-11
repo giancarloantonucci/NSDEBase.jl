@@ -1,6 +1,6 @@
 # .github/dependabot.yml  (note: this file sits in .github/, not .github/workflows/)
 #
-# ArrowMacros is registered in General, so Dependabot covers both the GitHub
+# NSDEBase is registered in General, so Dependabot covers both the GitHub
 # Actions versions and the Julia [compat] bounds. It replaces CompatHelper.
 version: 2
 updates:
