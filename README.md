@@ -1,39 +1,58 @@
 # NSDEBase.jl
 
-A Julia package containing shared types and functions of [NSDE.jl](https://github.com/giancarloantonucci/NSDE.jl) and its sub-packages.
+Problem definitions and shared interfaces for the NSDE ecosystem.
 
 [![Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://giancarloantonucci.github.io/NSDEBase.jl/dev) ![Build Status](https://img.shields.io/github/actions/workflow/status/giancarloantonucci/NSDEBase.jl/CI.yml) ![Coverage Status](https://img.shields.io/codecov/c/github/giancarloantonucci/NSDEBase.jl)
 
-## Installation
-
-NSDEBase is a [registered package](https://juliahub.com/ui/Search?q=NSDEBase&type=packages) compatible with Julia v1.6 and above. From the Julia REPL,
-
-```
-]add NSDEBase
-```
-
-## Usage
-
-NSDEBase holds what every solver package shares: the abstract type tree, the right-hand-side objects, `InitialValueProblem`, the `solve`/`solve!` contract, and a set of well-known test problems.
+## Start here
 
 ```julia
 using NSDEBase
-
-# from a function — in-place or not; the missing form and the Jacobian are derived
-problem = IVP((du, u, t) -> du .= u .* (1 .- u), [0.5], (0.0, 1.0))
-
-# linear, f = L·u + g(t)
-problem = IVP(reshape([-10.0], 1, 1), [0.1], (0.0, 1.0))
-
-# split, f = L·u + fₙₛ(u, t), for IMEX and exponential solvers
-problem = IVP(reshape([-10.0], 1, 1), (u, t) -> sin.(u), [0.1], (0.0, 1.0))
-
-# cheap re-windowing for chunked and windowed solvers: the RHS is shared, not rebuilt
-subproblem = copy(problem, [0.2], 0.5, 1.0)
+problem = IVP((u,t) -> u .* (1 .- u), [0.3], (0.0, 2.0))
+short = remake(problem; u0=[0.4], tspan=(0.0, 1.0))
+@assert short.rhs === problem.rhs
 ```
 
-Complex-valued problems get their Jacobian as a Wirtinger derivative (`RHS(f; iscomplex = true)`).
+It supplies `IVP`, `RHS`, `LRHS`, `SRHS`, built-in problems, and the shared
+solver interfaces. It does not integrate a problem by itself.
 
-Bundled test problems: `Dahlquist`, `Logistic`, `SimplePendulum`, `DoublePendulum`, `VanDerPol`, `Rössler`, `Lorenz`, `Lorenz96`.
+Integer data are converted to floating point. Complex linear operators promote
+real states; function-based problems infer complex differentiation from their
+state. Jacobian-based complex solves require a holomorphic right-hand side.
+`remake` shares an already-compatible state buffer: copy it when independent
+ownership is needed.
 
-Read the [documentation](https://giancarloantonucci.github.io/NSDEBase.jl/dev) for a complete overview of this package.
+## Learn by running
+
+The [guided tour](docs/src/guide.md) explains each step. Its companion
+[`examples/guided_tour.jl`](examples/guided_tour.jl) runs the numerical examples
+with assertions. Run it in a project containing this package and its example
+dependencies; use Julia 1.10 or later.
+
+The ecosystem is NSDEBase → NSDERungeKutta → NSDETimeParallel → NSDEMovingWindow.
+ArrowMacros provides supporting macros; they are not required in user examples.
+
+## Installation and versions
+
+For a registered release, use `Pkg.add("NSDEBase")`. These docs describe the
+current development API; a registered version may differ. To use a local
+checkout, activate your working environment and `Pkg.develop(path="/path/to/NSDEBase")`.
+Develop matching local dependency checkouts in that environment too, then check
+`Pkg.status()`. The serial and parallel guides also require NSDERungeKutta;
+plotting requires Plots.
+
+See the [documentation](https://giancarloantonucci.github.io/NSDEBase.jl/dev/)
+and [API reference](docs/src/api.md) for details.
+
+## Build the manual locally
+
+From the package root, with matching dependency checkouts already available:
+
+```sh
+julia --project=docs -e 'using Pkg; Pkg.develop(path="."); Pkg.instantiate()'
+julia --project=docs --threads=4 docs/make.jl
+```
+
+Documenter executes the guided-tour examples during the build. For local
+unreleased dependencies, develop their paths into `docs` before instantiating.
+The deployment step only publishes in an appropriately configured CI environment.

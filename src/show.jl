@@ -10,7 +10,7 @@ function Base.show(io::IO, object::AbstractObject; depth=4)
     names = propertynames(object)
     num_properties = length(names)
     nothings = 0
-    for n = num_properties:-1:1
+    for n in num_properties:-1:1
         if getproperty(object, names[n]) isa Nothing
             nothings += 1
         else
@@ -30,7 +30,11 @@ function Base.show(io::IO, object::AbstractObject; depth=4)
         print(io, "\n", padding, (is_property_last ? "└─ " : "├─ "), string(name))
         if current_level < depth
             level += 1
-            io2 = IOContext(io, :padding => string(padding, is_property_last ? "   " : "│  "), :current_level => level)
+            io2 = IOContext(
+                io,
+                :padding => string(padding, is_property_last ? "   " : "│  "),
+                :current_level => level,
+            )
             print(io, "::")
             summary(io, property)
             if property isa Number || property isa AbstractArray

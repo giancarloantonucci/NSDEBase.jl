@@ -11,18 +11,60 @@ SplitRightHandSide(fₛ, fₙₛ)
 SRHS(args...; kwargs...)
 ```
 
+Raw functions accept `iscomplex` and `inplace`. The latter is a shared choice
+or a `(stiff_choice, nonstiff_choice)` pair, each `true`, `false`, or `nothing`.
+Prebuilt RHS objects retain their own calling convention.
+
 # Arguments
 - `fₛ::Union{LinearRightHandSide,NonlinearRightHandSide}` : $f_\text{s}$, the stiff part of the right-hand side function $f$
 - `fₙₛ::NonlinearRightHandSide` : $f_\text{ns}$, the non-stiff part of the right-hand side function $f$
 """
-struct SplitRightHandSide{fₛ_T<:Union{LinearRightHandSide,NonlinearRightHandSide}, fₙₛ_T<:NonlinearRightHandSide} <: AbstractRightHandSide
+struct SplitRightHandSide{
+    fₛ_T<:Union{LinearRightHandSide,NonlinearRightHandSide},fₙₛ_T<:NonlinearRightHandSide
+} <: AbstractRightHandSide
     fₛ::fₛ_T
     fₙₛ::fₙₛ_T
 end
 
-SplitRightHandSide(fₛ::Function, fₙₛ::NonlinearRightHandSide) = SplitRightHandSide(NonlinearRightHandSide(fₛ), fₙₛ)
-SplitRightHandSide(L::Union{Number,AbstractMatrix{<:Number}}, fₙₛ::NonlinearRightHandSide) = SplitRightHandSide(LinearRightHandSide(L), fₙₛ)
-SplitRightHandSide(fₛ::Union{Number,AbstractMatrix{<:Number},Function,LinearRightHandSide,NonlinearRightHandSide}, fₙₛ::Function) = SplitRightHandSide(fₛ, NonlinearRightHandSide(fₙₛ))
+function split_inplace(inplace)
+    choices = inplace isa Tuple && length(inplace) == 2 ? inplace : (inplace, inplace)
+    all(x -> x === nothing || x isa Bool, choices) || throw(
+        ArgumentError("inplace must be true, false, nothing, or a (stiff, nonstiff) pair of these"),
+    )
+    return choices
+end
+
+function SplitRightHandSide(
+    fₛ::Function, fₙₛ::NonlinearRightHandSide; iscomplex=false, inplace=nothing
+)
+    a, _ = split_inplace(inplace)
+    return SplitRightHandSide(RHS(fₛ; iscomplex, inplace=a), fₙₛ)
+end
+function SplitRightHandSide(
+    L::Union{Number,AbstractMatrix{<:Number}},
+    fₙₛ::NonlinearRightHandSide;
+    iscomplex=false,
+    inplace=nothing,
+)
+    split_inplace(inplace)
+    return SplitRightHandSide(LRHS(L), fₙₛ)
+end
+function SplitRightHandSide(
+    fₛ::Union{Number,AbstractMatrix{<:Number},Function,LinearRightHandSide,NonlinearRightHandSide},
+    fₙₛ::Function;
+    iscomplex=false,
+    inplace=nothing,
+)
+    a, b = split_inplace(inplace)
+    stiff = if fₛ isa Function
+        RHS(fₛ; iscomplex, inplace=a)
+    elseif fₛ isa Union{Number,AbstractMatrix}
+        LRHS(fₛ)
+    else
+        fₛ
+    end
+    return SplitRightHandSide(stiff, RHS(fₙₛ; iscomplex, inplace=b))
+end
 @doc (@doc SplitRightHandSide) SRHS(args...; kwargs...) = SplitRightHandSide(args...; kwargs...)
 
 #----------------------------------- METHODS -----------------------------------

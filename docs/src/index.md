@@ -1,32 +1,24 @@
 # NSDEBase.jl
 
-This is the documentation of [NSDEBase.jl](https://github.com/giancarloantonucci/NSDEBase.jl), the root package of the NSDE ecosystem: the shared abstract types, the right-hand-side objects, `InitialValueProblem`, the `solve`/`solve!` contract that every solver package extends, and a set of well-known test problems.
+Problem definitions and shared interfaces for the NSDE ecosystem.
 
-## Installation
-
-From the Julia REPL,
-
-```
-]add https://github.com/giancarloantonucci/NSDEBase.jl
-```
-
-## Right-hand sides and problems
-
-An `InitialValueProblem` (alias `IVP`) pairs a right-hand side with an initial value and a time span. The right-hand side comes in three kinds, and the solver packages dispatch on them:
-
-- [`NonlinearRightHandSide`](@ref) (`RHS`) — generic ``f(u, t)``. Build it from a function, in-place or not: the missing form and the Jacobian (ForwardDiff, or a Wirtinger derivative for complex problems via `iscomplex = true`) are derived.
-- [`LinearRightHandSide`](@ref) (`LRHS`) — ``f = Lu + g(t)``, enabling direct linear solves in implicit methods.
-- [`SplitRightHandSide`](@ref) (`SRHS`) — ``f = f_s + f_{ns}``, for IMEX (and, on the roadmap, exponential) solvers.
+## First example
 
 ```julia
 using NSDEBase
-problem = IVP((du, u, t) -> du .= u .* (1 .- u), [0.5], (0.0, 1.0))
-problem = IVP(reshape([-10.0], 1, 1), [0.1], (0.0, 1.0))                  # linear
-problem = IVP(reshape([-10.0], 1, 1), (u, t) -> sin.(u), [0.1], (0.0, 1.0)) # split
+problem = IVP((u,t) -> u .* (1 .- u), [0.3], (0.0, 2.0))
+short = remake(problem; u0=[0.4], tspan=(0.0, 1.0))
+@assert short.rhs === problem.rhs
 ```
 
-`copy(problem, u0, tspan)` re-windows a problem cheaply — the right-hand side is shared, not rebuilt — which is the seam the chunked and windowed solvers stand on. The in-place right-hand-side calls have a 4-argument form taking caller-owned scratch, so hot loops stay allocation-free.
+Start with the [guided tour](guide.md), then consult:
 
-Bundled test problems: `Dahlquist`, `Logistic`, `SimplePendulum`, `DoublePendulum`, `VanDerPol`, `Rössler`, `Lorenz`, `Lorenz96`.
+- [API](api.md)
 
-See the [API](api.md) for the full reference.
+## Environment
+
+These pages describe the current development checkout (Julia 1.10 or later).
+Use compatible versions of the NSDE packages in one project. For local
+checkouts, develop each package with `Pkg.develop(path="/path/to/package")`;
+`Pkg.status()` reports what will actually load. A registered release may expose
+an older API. Plotting examples additionally need Plots.

@@ -53,7 +53,7 @@ packages extend this function.
 """
 function initialize_solution end
 
-export AbstractObject
+export AbstractObject, SolverFailure
 
 export AbstractProblem
 export AbstractSolver
@@ -84,7 +84,7 @@ export Lorenz
 export Lorenz96
 
 export zero!
-export copy
+export remake, chunk_solver, withstepsize
 export solve, solve!
 export initialize_cache, initialize_solution
 

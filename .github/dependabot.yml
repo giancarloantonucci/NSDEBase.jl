@@ -12,3 +12,11 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: Distributed
+      - dependency-name: LinearAlgebra
+      - dependency-name: Serialization
+      - dependency-name: SparseArrays
+      - dependency-name: Test
+
+

@@ -129,13 +129,13 @@ function Lorenz96(u0=[1.01; ones(39)], tspan=(0.0, 1.0); F=8.0)
         for i in eachindex(du)
             # Periodic BCs at i = 1, 2, N
             if i == 1
-                du[1] = (u[2] - u[N-1]) * u[N] - u[1] + F
+                du[1] = (u[2] - u[N - 1]) * u[N] - u[1] + F
             elseif i == 2
                 du[2] = (u[3] - u[N]) * u[1] - u[2] + F
             elseif i == N
-                du[N] = (u[1] - u[N-2]) * u[N-1] - u[N] + F
+                du[N] = (u[1] - u[N - 2]) * u[N - 1] - u[N] + F
             else
-                du[i] = (u[i+1] - u[i-2]) * u[i-1] - u[i] + F
+                du[i] = (u[i + 1] - u[i - 2]) * u[i - 1] - u[i] + F
             end
         end
         return du
