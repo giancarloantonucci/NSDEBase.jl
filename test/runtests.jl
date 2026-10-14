@@ -20,6 +20,25 @@ function measure_remake_allocs(problem, u0, tspan)
     return @allocated remake(problem; u0, tspan)
 end
 
+# Count boxed captures in the closures an object holds, at any depth. Julia
+# boxes a captured variable that is reassigned, which makes calls through the
+# closure type-unstable.
+function count_boxes(x, seen=IdDict{Any,Nothing}())
+    haskey(seen, x) && return 0
+    seen[x] = nothing
+    n = 0
+    for name in fieldnames(typeof(x))
+        isdefined(x, name) || continue
+        v = getfield(x, name)
+        if v isa Core.Box
+            n += 1
+        elseif v isa Function || v isa NSDEBase.AbstractObject
+            n += count_boxes(v, seen)
+        end
+    end
+    return n
+end
+
 struct TestChunkSolver <: AbstractInitialValueSolver
     state::Vector{Float64}
 end
@@ -217,6 +236,32 @@ struct UndocumentedIVP <: AbstractInitialValueProblem end
             @test rhs(du, v, u, t) ≈ du_ref
             @test measure_rhs_allocs(rhs, du, v, u, t) == 0
         end
+    end
+
+    @testset "derived closures are type-stable" begin
+        f(u, t) = @. u * (1 - u)
+        f!(du, u, t) = (@. du = u * (1 - u); du)
+        g(t) = [sin(t), cos(t)]
+        g!(du, t) = (du[1]=sin(t); du[2]=cos(t); du)
+        L = [-1.0 0.0; 0.0 -2.0]
+        u, t = [0.3, 0.6], 0.1
+        du = similar(u)
+        rhss = (
+            RHS(f),
+            RHS(f!),
+            RHS(f; iscomplex=true),
+            LRHS(L, g),
+            LRHS(L, g!),
+            SRHS(L, f),
+            Logistic().rhs,
+        )
+        for rhs in rhss
+            @test count_boxes(rhs) == 0
+        end
+        @test (@inferred RHS(f).f!(du, u, t)) == f(u, t)
+        @test (@inferred RHS(f!).f(u, t)) == f(u, t)
+        @test (@inferred LRHS(L, g).g!(du, t)) == g(t)
+        @test (@inferred LRHS(L, g!).g(t)) == g(t)
     end
 
     @testset "calling conventions" begin

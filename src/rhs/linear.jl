@@ -25,18 +25,9 @@ end
 
 function LinearRightHandSide(L::AbstractMatrix{<:Number}, g!_or_g::Function; inplace=nothing)
     if rhs_inplace(g!_or_g, 1; inplace)
-        g! = g!_or_g
-        # A dense buffer of the operator's element type, whatever the storage of `L`.
-        g = function (t)
-            du = Vector{eltype(L)}(undef, size(L, 1))
-            g!(du, t)
-            return du
-        end
-    else
-        g = g!_or_g
-        g! = (du, t) -> du .= g(t)
+        return LinearRightHandSide(L, _derive_outofplace_forcing(L, g!_or_g), g!_or_g)
     end
-    return LinearRightHandSide(L, g, g!)
+    return LinearRightHandSide(L, g!_or_g, _derive_inplace_forcing(g!_or_g))
 end
 LinearRightHandSide(L::AbstractMatrix{<:Number}) = LinearRightHandSide(L, nothing, nothing)
 
@@ -45,7 +36,21 @@ function LinearRightHandSide(L::Number, g!_or_g::Function; kwargs...)
     return LinearRightHandSide(hcat(L), g!_or_g; kwargs...)
 end
 LinearRightHandSide(L::Number) = LinearRightHandSide(hcat(L))
+
 @doc (@doc LinearRightHandSide) LRHS(args...; kwargs...) = LinearRightHandSide(args...; kwargs...)
+
+# As for the nonlinear RHS, each derived closure is built in a function of its
+# own so that no captured variable is reassigned (and boxed).
+
+# A dense buffer of the operator's element type, whatever the storage of `L`.
+function _derive_outofplace_forcing(L, g!)
+    return function (t)
+        du = Vector{eltype(L)}(undef, size(L, 1))
+        g!(du, t)
+        return du
+    end
+end
+_derive_inplace_forcing(g) = (du, t) -> du .= g(t)
 
 #----------------------------------- METHODS -----------------------------------
 

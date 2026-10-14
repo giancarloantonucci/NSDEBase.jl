@@ -69,28 +69,39 @@ end
 
 function NonlinearRightHandSide(f!_or_f::Function; iscomplex::Bool=false, inplace=nothing)
     if rhs_inplace(f!_or_f, 2; inplace)
-        f! = f!_or_f
-        # Return the filled buffer, never `f!`'s own return value: a mutating
-        # function is entitled to return `nothing`, and the out-of-place path
-        # (and ForwardDiff through it) needs the array.
-        f = (u, t) -> (du=similar(u); f!(du, u, t); du)
+        f!, f = f!_or_f, _derive_outofplace(f!_or_f)
     else
-        f = f!_or_f
-        f! = (du, u, t) -> du .= f(u, t)
+        f!, f = _derive_inplace(f!_or_f), f!_or_f
     end
-    if iscomplex
-        Df = (u, t) -> _wirtinger_jacobian(f, u, t)
-        Df! = (J, du, u, t) -> J .= Df(u, t)
-    else
-        Df = (u, t) -> ForwardDiff.jacobian(u -> f(u, t), u)
-        Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, (du, u) -> f!(du, u, t), du, u)
-    end
+    Df, Df! = iscomplex ? _wirtinger_jacobians(f) : _forwarddiff_jacobians(f, f!)
     return NonlinearRightHandSide(f, f!, Df, Df!)
 end
 
 @doc (@doc NonlinearRightHandSide) RightHandSide(args...; kwargs...) =
     NonlinearRightHandSide(args...; kwargs...)
 @doc (@doc RightHandSide) RHS(args...; kwargs...) = RightHandSide(args...; kwargs...)
+
+# Each derived closure is built in a function of its own, so no captured
+# variable is ever reassigned: Julia boxes such variables, which makes every
+# call through the closure type-unstable.
+
+# Return the filled buffer, never `f!`'s own return value: a mutating function
+# is entitled to return `nothing`, and the out-of-place path (and ForwardDiff
+# through it) needs the array.
+_derive_outofplace(f!) = (u, t) -> (du=similar(u); f!(du, u, t); du)
+_derive_inplace(f) = (du, u, t) -> du .= f(u, t)
+
+function _forwarddiff_jacobians(f, f!)
+    Df = (u, t) -> ForwardDiff.jacobian(u -> f(u, t), u)
+    Df! = (J, du, u, t) -> ForwardDiff.jacobian!(J, (du, u) -> f!(du, u, t), du, u)
+    return Df, Df!
+end
+
+function _wirtinger_jacobians(f)
+    Df = (u, t) -> _wirtinger_jacobian(f, u, t)
+    Df! = (J, du, u, t) -> J .= Df(u, t)
+    return Df, Df!
+end
 
 #----------------------------------- METHODS -----------------------------------
 

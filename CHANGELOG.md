@@ -37,6 +37,11 @@
   cause a shorter signature to be misclassified.
 - Derived in-place forcing that returns `nothing` works; standalone forcing
   uses dense buffers, and RHS calls use state-compatible buffers.
+- The functions `RHS` and `LRHS` derive (the missing in-place or out-of-place
+  form, and the Jacobians) no longer capture boxed variables, so calls
+  through them are type-stable. The derived Jacobian `Df` is several times
+  faster, and a derived `f!` or `g!` allocates only what the user's function
+  does.
 
 ## 0.3.1
 
