@@ -478,7 +478,17 @@ struct UndocumentedIVP <: AbstractInitialValueProblem end
         @test zero!(w) == [[0.0], [0.0, 0.0]]
 
         str = sprint(show, Dahlquist())
-        @test occursin("InitialValueProblem", str)
-        @test occursin("LinearRightHandSide", str)
+        @test startswith(str, "InitialValueProblem\n")
+        @test occursin("├─ rhs::LinearRightHandSide\n", str)      # name printed once
+        @test occursin("│  └─ L::1×1 Matrix{Float64} = ", str)
+        @test occursin("├─ u0::1-element Vector{Float64} = [0.5]", str)
+        @test occursin("└─ tspan::Tuple{Float64, Float64} = (0.0, 1.0)", str)
+        g(t) = [1.0]
+        str = sprint(show, LRHS(-1.0, g))
+        @test occursin("├─ g::", str)
+        @test !occursin("var\"", str)                            # functions: summary only
+        shallow = sprint((io, x) -> show(io, x; depth=1), Dahlquist())
+        @test occursin("├─ rhs::LinearRightHandSide\n├─ u0::", shallow)
+        @test !occursin("L::", shallow)
     end
 end

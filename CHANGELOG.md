@@ -42,6 +42,8 @@
   through them are type-stable. The derived Jacobian `Df` is several times
   faster, and a derived `f!` or `g!` allocates only what the user's function
   does.
+- `show` prints a nested object's type once instead of twice, and separates
+  any other value from its type with ` = `; functions show their type only.
 
 ## 0.3.1
 

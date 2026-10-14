@@ -34,12 +34,14 @@ function Base.show(io::IO, object::AbstractObject; depth=4)
                 :current_level => level,
             )
             print(io, "::")
-            summary(io, property)
-            if property isa Number || property isa AbstractArray
-                print(io, " = ")
-                show(IOContext(io2, :limit => true), property)
+            if property isa AbstractObject
+                show(io2, property) # starts with its own summary
             else
-                show(io2, property)
+                summary(io, property)
+                if !(property isa Function)
+                    print(io, " = ")
+                    show(IOContext(io2, :limit => true), property)
+                end
             end
         else
             print(io, "::")
