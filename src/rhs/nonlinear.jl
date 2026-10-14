@@ -1,5 +1,3 @@
-# NSDEBase/src/rhs/nonlinear.jl
-
 @doc raw"""
     NonlinearRightHandSide <: AbstractRightHandSide
 
@@ -8,7 +6,7 @@ A composite type for the right-hand side of an [`InitialValueProblem`](@ref) in 
 # Constructors
 ```julia
 NonlinearRightHandSide(f, f!, Df, Df!)
-NonlinearRightHandSide(f!_or_f; iscomplex=false)
+NonlinearRightHandSide(f!_or_f; iscomplex=false, inplace=nothing)
 RightHandSide(args...; kwargs...)
 RHS(args...; kwargs...)
 ```
@@ -113,7 +111,6 @@ end
 
 function (rhs::NonlinearRightHandSide)(du, u, t)
     @↓ f! = rhs
-    # @! du = f(u, t)
     f!(du, u, t)
     return du
 end

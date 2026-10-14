@@ -20,7 +20,7 @@ decay = IVP(L, [1.0, 1.0], (0, 1))
 # u' = L*u + g(t): forcing takes time alone.
 forced = IVP(LRHS(L, t -> [sin(t), 0.0]), [0.0, 0.0], (0, 1))
 
-# u' = L*u + f_nonstiff(u,t): for IMEX or exponential methods.
+# u' = L*u + f_nonstiff(u, t): for IMEX or exponential methods.
 split = IVP(L, (u, t) -> [sin(u[2]), cos(u[1])], [1.0, 0.0], (0, 1))
 @assert decay.tspan === (0.0, 1.0)
 @assert split.rhs isa SplitRightHandSide

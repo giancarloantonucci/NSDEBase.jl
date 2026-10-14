@@ -8,7 +8,7 @@ Problem definitions and shared interfaces for the NSDE ecosystem.
 
 ```julia
 using NSDEBase
-problem = IVP((u,t) -> u .* (1 .- u), [0.3], (0.0, 2.0))
+problem = IVP((u, t) -> u .* (1 .- u), [0.3], (0.0, 2.0))
 short = remake(problem; u0=[0.4], tspan=(0.0, 1.0))
 @assert short.rhs === problem.rhs
 ```

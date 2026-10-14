@@ -1,5 +1,3 @@
-# NSDEBase/src/show.jl
-
 """
     show(io::IO, object::AbstractObject)
 

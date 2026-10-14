@@ -1,14 +1,42 @@
 # Changelog
 
-## 0.4.0 development revision (unreleased)
+## 0.4.0 (unreleased)
 
-- Add SolverFailure and document the mutable custom-IVP interface. Extract the Wirtinger block without a dense solve. Validate forced RHS arities and forward inplace through all function IVP forms and split constructors. When both signatures exist, out-of-place now wins by default; use inplace=true to retain the former preference.
-- Promote real states for complex linear operators and infer complex differentiation in function-based IVPs. Add explicit RHS `inplace` overrides and handle optional arguments without misclassifying their shorter signatures.
-- Normalize integer/rational initial data and mixed time endpoints at problem construction, preserving floating-state aliases. Allow independently typed linear operators and states.
-- Fix derived in-place forcing that returns nothing; use dense standalone forcing buffers and state-compatible buffers in RHS calls.
-- Promote mixed time-span endpoints in `remake`.
-- Added `remake`, `chunk_solver`, and `withstepsize` extension interfaces. Removed multi-argument problem `copy`; use `remake` directly. Raised the Julia minimum to 1.10.
-- All Julia sources, tests, and examples follow the repository JuliaFormatter configuration. Historical implementation notes have been removed from current API descriptions.
+### Breaking
+
+- When a function has both an out-of-place `f(u, t)` and an in-place
+  `f!(du, u, t)` method, the out-of-place form now wins by default. Pass
+  `inplace=true` to keep the former choice.
+- The multi-argument problem `copy` is removed; use `remake`.
+- Supported Julia: `1.10` and later (was `1.6`).
+
+### Added
+
+- `remake`, `chunk_solver` and `withstepsize` extension interfaces.
+- `SolverFailure`, the abstract type for numerical solver failures, and the
+  documented interface a custom IVP must provide.
+- An `inplace` keyword (`true`, `false` or `nothing`) on `RHS`, `LRHS`,
+  `SRHS` and every function-based `IVP` constructor; split constructors also
+  take a `(stiff, nonstiff)` pair.
+
+### Changed
+
+- Integer and rational initial data are converted to floating point, and
+  mixed time endpoints are promoted, both at construction and in `remake`.
+  Floating-point states are kept without copying.
+- Complex linear operators promote real states, and function-based IVPs infer
+  complex differentiation from complex initial data.
+- Linear operators and states may have independent element types.
+- The Wirtinger Jacobian is extracted directly, without a dense linear solve.
+- Sources, tests and examples follow the repository JuliaFormatter
+  configuration (Blue style), checked in CI.
+
+### Fixed
+
+- Forcing-function arities are validated, and optional arguments no longer
+  cause a shorter signature to be misclassified.
+- Derived in-place forcing that returns `nothing` works; standalone forcing
+  uses dense buffers, and RHS calls use state-compatible buffers.
 
 ## 0.3.1
 

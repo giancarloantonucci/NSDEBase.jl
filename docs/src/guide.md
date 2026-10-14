@@ -32,14 +32,14 @@ lorenz = IVP(lorenz!, [2.0, 3.0, -14.0], (0.0, 20.0))
 nothing # hide
 ```
 
-An out-of-place `f(u,t)` returns a state-shaped vector. An in-place
-`f!(du,u,t)` fills `du`; its return value is ignored. Avoid shared scratch
+An out-of-place `f(u, t)` returns a state-shaped vector. An in-place
+`f!(du, u, t)` fills `du`; its return value is ignored. Avoid shared scratch
 storage in a closure if the problem will be solved on multiple threads.
 
 The shorter signature wins when both forms are present, including functions
 with optional arguments. Resolve ambiguity explicitly with `inplace=true` or
 `inplace=false`. An explicit choice is checked for compatible arity, not for all
-possible state types. For a split problem, `inplace=(true,false)` chooses the
+possible state types. For a split problem, `inplace=(true, false)` chooses the
 stiff and nonstiff conventions separately.
 
 ## Preserve the structure of the equation
@@ -52,21 +52,21 @@ decay = IVP(L, [1.0, 1.0], (0, 1))
 # u' = L*u + g(t): forcing takes time alone.
 forced = IVP(LRHS(L, t -> [sin(t), 0.0]), [0.0, 0.0], (0, 1))
 
-# u' = L*u + f_nonstiff(u,t): for IMEX or exponential methods.
-split = IVP(L, (u,t) -> [sin(u[2]), cos(u[1])], [1.0, 0.0], (0, 1))
+# u' = L*u + f_nonstiff(u, t): for IMEX or exponential methods.
+split = IVP(L, (u, t) -> [sin(u[2]), cos(u[1])], [1.0, 0.0], (0, 1))
 @assert decay.tspan === (0.0, 1.0)
 @assert split.rhs isa SplitRightHandSide
 nothing # hide
 ```
 
 `IVP(L, f, u0, tspan)` is a **split** equation: `f` takes the state and time.
-Use `LRHS(L,g)` when the additive forcing takes time alone. Prebuilt `RHS`,
+Use `LRHS(L, g)` when the additive forcing takes time alone. Prebuilt `RHS`,
 `LRHS`, and `SRHS` objects retain their calling conventions.
 
 ## Types, Jacobians, and remaking a problem
 
 ```@example problems
-integer_data = IVP((u,t) -> -u, [1, 2], (0, 1))
+integer_data = IVP((u, t) -> -u, [1, 2], (0, 1))
 rotation = IVP(-1im, [1.0], (0, 1))
 new_start = [1.0, 1.0, 1.0]
 short = remake(lorenz; u0=new_start, tspan=(0.0, 2.0))

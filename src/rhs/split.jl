@@ -1,5 +1,3 @@
-# NSDEBase/src/rhs/split.jl
-
 @doc raw"""
     SplitRightHandSide <: AbstractRightHandSide
 
@@ -88,7 +86,6 @@ end
 
 function (rhs::SplitRightHandSide)(du, u, t)
     @↓ fₛ, fₙₛ = rhs
-    # @! du = fₛ(u, t) + fₙₛ(u, t)
     fₛ(du, u, t)
     v = similar(du)
     fₙₛ(v, u, t)
@@ -98,7 +95,6 @@ end
 
 function (rhs::SplitRightHandSide)(du, v, u, t)
     @↓ fₛ, fₙₛ = rhs
-    # @! du = fₛ(u, t) + fₙₛ(u, t)
     fₛ(du, v, u, t) # fₛ is done with the scratch `v` once it returns
     fₙₛ(v, u, t)
     du .+= v

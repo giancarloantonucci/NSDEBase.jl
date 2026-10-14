@@ -1,5 +1,3 @@
-# NSDEBase/src/utils.jl
-
 """
     zero!(v::AbstractVector)
 

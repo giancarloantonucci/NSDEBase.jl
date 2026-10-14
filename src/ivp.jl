@@ -1,5 +1,3 @@
-# NSDEBase/src/ivp.jl
-
 """
     InitialValueProblem <: AbstractInitialValueProblem
 
@@ -122,26 +120,16 @@ end
 """
     remake(problem; u0=problem.u0, tspan=problem.tspan)
 
-Build a problem with the same right-hand side and selected new initial data.
-Time-span endpoints are promoted to a common numeric type.
-A supplied floating-point state is not copied; other numeric states are converted.
-Use `copy(u0)` for independent storage.
+builds a problem with the same right-hand side and selected new initial data.
+Time-span endpoints are promoted to a common numeric type. A supplied
+floating-point state is not copied; other numeric states are converted. Use
+`copy(u0)` for independent storage. Other subtypes of
+[`AbstractInitialValueProblem`](@ref) must implement their own method; the
+fallback throws an `ArgumentError`.
 """
 function remake(problem::InitialValueProblem; u0=problem.u0, tspan=problem.tspan)
     return IVP(problem.rhs, u0, promote(tspan...))
 end
-
-"""
-    chunk_solver(solver, duration)
-
-Prepare a solver for a chunk of nominal duration. Solver packages may specialise
-this interface to share a fixed schedule across translated chunks. The fallback
-copies the solver, so run-local mutable state is never shared with its caller.
-"""
-chunk_solver(solver::AbstractInitialValueSolver, duration::Real) = deepcopy(solver)
-
-"Return a solver with changed immutable step-size settings; implemented by solver packages."
-function withstepsize end
 
 function remake(problem::AbstractInitialValueProblem; kwargs...)
     return throw(
@@ -150,3 +138,20 @@ function remake(problem::AbstractInitialValueProblem; kwargs...)
         ),
     )
 end
+
+"""
+    chunk_solver(solver, duration)
+
+prepares a solver for a chunk of nominal `duration`. Solver packages may
+specialise it to share a fixed schedule across translated chunks. The fallback
+copies the solver, so run-local mutable state is never shared with its caller.
+"""
+chunk_solver(solver::AbstractInitialValueSolver, duration::Real) = deepcopy(solver)
+
+"""
+    withstepsize(solver, h) :: AbstractInitialValueSolver
+
+returns a solver like `solver` but with step size `h`, leaving `solver`
+unchanged. Solver packages extend this function.
+"""
+function withstepsize end

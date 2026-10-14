@@ -1,5 +1,3 @@
-# NSDEBase/src/odes.jl
-
 """
     Dahlquist(u0=0.5, tspan=(0.0, 1.0); λ=1.0)::InitialValueProblem
     Dahlquist(u0, t0, tN; kwargs...)::InitialValueProblem
@@ -23,14 +21,14 @@ Logistic(u0, t0, tN; λ=1.0) = Logistic(u0, (t0, tN); λ)
 
 """
     SimplePendulum(u0=[π/4, 0.0], tspan=(0.0, 2π/3 * √9.81))::InitialValueProblem
-    SimplePendulum(u0, t0, tN; kwargs...)::InitialValueProblem
+    SimplePendulum(u0, t0, tN)::InitialValueProblem
 
 returns an [`InitialValueProblem`](@ref) for the simple pendulum problem.
 """
 function SimplePendulum(u0=[π/4, 0.0], tspan=(0.0, 2π/3 * √9.81))
     function f!(du, u, t)
         du[1] = u[2]
-        du[2] = - sin(u[1])
+        du[2] = -sin(u[1])
         return du
     end
     return InitialValueProblem(f!, u0, tspan)
@@ -46,16 +44,13 @@ returns an [`InitialValueProblem`](@ref) for the double pendulum problem.
 function DoublePendulum(u0=[π/4, π/4, 0.0, 0.0], tspan=(0.0, 1.0); μ=1.0, λ=1.0)
     function f!(du, u, t)
         θ₁, θ₂, ω₁, ω₂ = u
-        #
         M₁₁ = 1 + μ
         M₁₂ = M₂₁ = μ * λ * cos(θ₁ - θ₂)
         M₂₂ = μ * λ^2
         M = [M₁₁ M₁₂; M₂₁ M₂₂]
-        #
-        v₁ = - (1+μ) * sin(θ₁) - μ * λ * ω₂^2 * sin(θ₁ - θ₂)
-        v₂ = - μ * λ * sin(θ₂) + μ * λ * ω₁^2 * sin(θ₁ - θ₂)
+        v₁ = -(1 + μ) * sin(θ₁) - μ * λ * ω₂^2 * sin(θ₁ - θ₂)
+        v₂ = -μ * λ * sin(θ₂) + μ * λ * ω₁^2 * sin(θ₁ - θ₂)
         v = [v₁; v₂]
-        #
         du[1:2] .= u[3:4]
         du[3:4] .= M \ v
         return du
@@ -88,7 +83,7 @@ returns an [`InitialValueProblem`](@ref) for the Rössler equations.
 """
 function Rössler(u0=[2.0, 0.0, 0.0], tspan=(0.0, 1.0); α=0.2, β=0.2, γ=5.7)
     function f!(du, u, t)
-        du[1] = - u[2] - u[3]
+        du[1] = -u[2] - u[3]
         du[2] = u[1] + α * u[2]
         du[3] = β + u[3] * (u[1] - γ)
         return du
